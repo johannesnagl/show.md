@@ -70,10 +70,9 @@ public enum HTMLTemplate {
             "<tr><th>\(field.key)</th><td>\(field.value)</td></tr>"
         }.joined(separator: "\n")
         let count = fields.count
-        let noun = count == 1 ? "key" : "keys"
         return """
         <details class="frontmatter">
-          <summary>Frontmatter (\(count) \(noun) found)</summary>
+          <summary>Metadata (\(count)) — YAML Frontmatter</summary>
           <table>\(rows)</table>
         </details>
         """
