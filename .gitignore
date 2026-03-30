@@ -1,0 +1,9 @@
+.DS_Store
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+.build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+MarkdownRenderer/Package.resolved
