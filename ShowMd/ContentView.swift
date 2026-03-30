@@ -15,8 +15,8 @@ private func isExtensionEnabled() -> Bool {
     try? process.run()
     process.waitUntilExit()
     let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-    // pluginkit prefixes enabled extensions with "+" and disabled with "-"
-    return output.contains("+")
+    // Extension is active if the bundle ID appears in pluginkit output at all
+    return output.contains(extensionBundleID)
 }
 
 struct ContentView: View {
@@ -63,20 +63,21 @@ struct ContentView: View {
     private var formView: some View {
         Form {
             Section("Preview") {
-                HStack {
-                    Label {
-                        Text("Quick Look Extension")
-                    } icon: {
-                        Image(systemName: extensionEnabled ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .foregroundStyle(extensionEnabled ? .green : .red)
-                    }
-                    Spacer()
-                    Button(extensionEnabled ? "Manage in Settings" : "Enable Extension") {
-                        if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
-                            NSWorkspace.shared.open(url)
+                if extensionEnabled {
+                    Label("Extension active", systemImage: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                } else {
+                    HStack {
+                        Label("Extension not installed", systemImage: "xmark.circle.fill")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button("Enable in System Settings") {
+                            if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
+                                NSWorkspace.shared.open(url)
+                            }
                         }
+                        .buttonStyle(.link)
                     }
-                    .buttonStyle(.link)
                 }
 
                 Picker("Default Tab", selection: $defaultTab) {
