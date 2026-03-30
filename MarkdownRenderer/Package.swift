@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "MarkdownRenderer",
-    platforms: [.macOS("15.0")],
+    platforms: [.macOS("26.0")],
     products: [
         .library(name: "MarkdownRenderer", targets: ["MarkdownRenderer"]),
     ],

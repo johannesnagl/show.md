@@ -1,0 +1,48 @@
+name: show.md
+options:
+  bundleIdPrefix: io.github.showmd
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+  xcodeVersion: "16.0"
+
+packages:
+  MarkdownRenderer:
+    path: MarkdownRenderer
+
+targets:
+  ShowMd:
+    type: application
+    platform: macOS
+    sources:
+      - ShowMd
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.showmd.app
+        PRODUCT_NAME: show.md
+        MACOSX_DEPLOYMENT_TARGET: "26.0"
+        ENABLE_HARDENED_RUNTIME: YES
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_FILE: ShowMd/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: ShowMd/ShowMd.entitlements
+    dependencies:
+      - package: MarkdownRenderer
+      - target: ShowMdExtension
+        embed: true
+
+  ShowMdExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - ShowMdExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.showmd.app.extension
+        MACOSX_DEPLOYMENT_TARGET: "26.0"
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_FILE: ShowMdExtension/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: ShowMdExtension/ShowMdExtension.entitlements
+    dependencies:
+      - package: MarkdownRenderer

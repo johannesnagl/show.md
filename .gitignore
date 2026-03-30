@@ -7,3 +7,4 @@ DerivedData/
 *.dSYM.zip
 *.dSYM
 MarkdownRenderer/Package.resolved
+show.md.xcodeproj/
