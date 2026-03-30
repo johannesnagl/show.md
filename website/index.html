@@ -257,13 +257,12 @@
   .hero {
     position: relative;
     z-index: 1;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 120px 40px 80px;
+    padding: 100px 40px 40px;
   }
 
   .hero-icon {
@@ -368,7 +367,7 @@
   .preview {
     position: relative;
     z-index: 1;
-    padding: 0 40px 120px;
+    padding: 0 40px 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -446,6 +445,9 @@
     padding: 4px 12px;
     border-radius: 5px;
     color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 
   .app-tab.active {
@@ -1046,10 +1048,23 @@
     padding: 8px 16px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
+    justify-content: space-between;
     border-bottom: 0.5px solid rgba(255,255,255,0.06);
   }
+
+  .app-copy-btn {
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.05);
+    border: 0.5px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+  .app-copy-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.09); }
+  .app-copy-btn.copied { color: #28C840; border-color: rgba(40,200,64,0.3); }
 
   /* SKIP LINK */
   .skip-link {
@@ -1301,8 +1316,8 @@
   @media (max-width: 640px) {
     nav { padding: 16px 20px; }
     .nav-links { display: none; }
-    .hero { padding: 100px 24px 60px; }
-    .preview { padding: 0 20px 80px; }
+    .hero { padding: 60px 24px 16px; }
+    .preview { padding: 0 20px 40px; }
     .app-body { padding: 20px; }
     .install { padding: 60px 20px; }
     .install-row { flex-direction: column; align-items: flex-start; }
@@ -1350,15 +1365,6 @@
 
   <!-- HERO -->
   <section class="hero" aria-labelledby="hero-heading">
-    <div class="hero-icon">
-      <svg width="72" height="72" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <rect width="64" height="64" rx="14" fill="#161616"/>
-        <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
-        <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
-        <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
-        <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
-      </svg>
-    </div>
 
     <h1 id="hero-heading" class="hero-title">
       Markdown was never meant<br>to be <em>previewed plain text.</em>
@@ -1374,15 +1380,14 @@
       <a href="#features" class="btn-secondary">see what it does →</a>
     </div>
 
-    <p class="hero-meta">AGENTS.md · README.md · CLAUDE.md · CHANGELOG.md</p>
   </section>
 
   <!-- APP PREVIEW -->
   <section class="preview">
     <div class="preview-switcher">
-      <button class="preview-btn active showmd" data-state="0">With Show.md</button>
-      <button class="preview-btn other" data-state="1">With other apps</button>
-      <button class="preview-btn macos" data-state="2">Default macOS</button>
+      <button class="preview-btn active showmd" data-state="0">✨ With Show.md</button>
+      <button class="preview-btn other" data-state="1">😬 With other apps</button>
+      <button class="preview-btn macos" data-state="2">😩 Default macOS</button>
     </div>
 
     <div class="app-frame">
@@ -1397,11 +1402,12 @@
       <div class="app-state visible" id="state-showmd">
         <div class="app-inner-bar">
           <div class="app-tabs">
-            <span class="app-tab active">Rendered</span>
-            <span class="app-tab">Source</span>
+            <button class="app-tab active" id="tab-rendered">Rendered</button>
+            <button class="app-tab" id="tab-source">Source</button>
           </div>
+          <button class="app-copy-btn" id="btn-copy-html">Copy as HTML</button>
         </div>
-        <div class="app-body">
+        <div class="app-body" id="showmd-rendered">
           <div class="md-meta-block">
             <div class="md-meta-summary">
               <span class="md-meta-summary-arrow">▶</span>
@@ -1423,6 +1429,21 @@
             <span class="md-tag">v2</span>
           </div>
         </div>
+        <div class="app-body-plain" id="showmd-source" style="display:none">---
+title: Agent instructions
+tags: [agent, config, v2]
+version: 2.1
+---
+
+# Agent instructions
+
+This file configures how the AI agent
+behaves in this repo. Read carefully
+before running any automated task.
+
+## Commands
+
+$ npm run build · npm test · npm run lint</div>
       </div>
 
       <!-- State 2: With other apps -->
@@ -1456,11 +1477,6 @@ $ npm run build · npm test · npm run lint</div>
       </div>
     </div>
 
-    <div class="progress-dots">
-      <div class="progress-dot active"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-    </div>
   </section>
 
   <!-- PROBLEM -->
@@ -1772,7 +1788,6 @@ $ npm run build · npm test · npm run lint</div>
 (function() {
   const stateIds = ['state-showmd', 'state-other', 'state-macos'];
   const btns = document.querySelectorAll('.preview-btn');
-  const dots = document.querySelectorAll('.progress-dot');
   const btnClasses = ['showmd', 'other', 'macos'];
   let current = 0;
   let timer;
@@ -1780,7 +1795,6 @@ $ npm run build · npm test · npm run lint</div>
   function showState(i) {
     stateIds.forEach((id, j) => {
       document.getElementById(id).classList.toggle('visible', j === i);
-      dots[j].classList.toggle('active', j === i);
       btns[j].classList.toggle('active', j === i);
     });
     current = i;
@@ -1801,6 +1815,39 @@ $ npm run build · npm test · npm run lint</div>
 
   showState(0);
   startCycle();
+
+  // Rendered / Source tab toggle
+  const tabRendered = document.getElementById('tab-rendered');
+  const tabSource = document.getElementById('tab-source');
+  const viewRendered = document.getElementById('showmd-rendered');
+  const viewSource = document.getElementById('showmd-source');
+  const copyBtn = document.getElementById('btn-copy-html');
+
+  tabRendered.addEventListener('click', function() {
+    tabRendered.classList.add('active');
+    tabSource.classList.remove('active');
+    viewRendered.style.display = '';
+    viewSource.style.display = 'none';
+    copyBtn.style.visibility = 'visible';
+  });
+
+  tabSource.addEventListener('click', function() {
+    tabSource.classList.add('active');
+    tabRendered.classList.remove('active');
+    viewRendered.style.display = 'none';
+    viewSource.style.display = '';
+    copyBtn.style.visibility = 'hidden';
+  });
+
+  // Copy as HTML (demo feedback)
+  copyBtn.addEventListener('click', function() {
+    copyBtn.textContent = 'Copied!';
+    copyBtn.classList.add('copied');
+    setTimeout(function() {
+      copyBtn.textContent = 'Copy as HTML';
+      copyBtn.classList.remove('copied');
+    }, 1800);
+  });
 })();
 </script>
 </body>
