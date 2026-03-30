@@ -46,6 +46,26 @@ public enum FrontmatterParser {
             let rawValue = line[line.index(after: colonIdx)...]
                 .trimmingCharacters(in: .whitespaces)
 
+            // Block scalar: > (folded) or | (literal)
+            if rawValue == ">" || rawValue == "|" {
+                let folded = rawValue == ">"
+                var collected: [String] = []
+                var j = i + 1
+                while j < lines.count {
+                    let next = lines[j]
+                    // Continuation lines are indented
+                    guard next.hasPrefix(" ") || next.hasPrefix("\t") else { break }
+                    collected.append(next.trimmingCharacters(in: .whitespaces))
+                    j += 1
+                }
+                let value = folded
+                    ? collected.joined(separator: " ")
+                    : collected.joined(separator: "\n")
+                fields.append((key: key, value: value))
+                i = j
+                continue
+            }
+
             if rawValue.isEmpty {
                 // Possibly a block sequence: gather "  - item" lines
                 var items: [String] = []
