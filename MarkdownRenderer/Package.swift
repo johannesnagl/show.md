@@ -3,12 +3,13 @@ import PackageDescription
 
 let package = Package(
     name: "MarkdownRenderer",
-    platforms: [.macOS(.v13)],
+    platforms: [.macOS("15.0")],
     products: [
         .library(name: "MarkdownRenderer", targets: ["MarkdownRenderer"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-markdown.git", from: "0.3.0"),
+        .package(url: "https://github.com/apple/swift-testing.git", from: "0.7.0"),
     ],
     targets: [
         .target(
@@ -19,7 +20,10 @@ let package = Package(
         ),
         .testTarget(
             name: "MarkdownRendererTests",
-            dependencies: ["MarkdownRenderer"]
+            dependencies: [
+                "MarkdownRenderer",
+                .product(name: "Testing", package: "swift-testing"),
+            ]
         ),
     ]
 )
