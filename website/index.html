@@ -658,6 +658,174 @@
 
   .footer-links a:hover { color: var(--muted); }
 
+  /* FRONTMATTER SPOTLIGHT */
+  .fm-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px;
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .fm-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .fm-eyebrow {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .fm-title {
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .fm-title em { font-style: italic; color: var(--muted); }
+
+  .fm-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .fm-desc code {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .fm-visual {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .fm-before, .fm-after { flex: 1; }
+
+  .fm-visual-label {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .fm-code {
+    background: #0D0D0D;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    white-space: pre;
+    color: #666;
+  }
+
+  .fm-delim { color: rgba(255,255,255,0.25); }
+  .fm-key   { color: #6B9FFF; }
+  .fm-body  { color: #444; }
+
+  .fm-arrow {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 16px;
+    color: rgba(255,255,255,0.15);
+    padding-top: 48px;
+    flex-shrink: 0;
+  }
+
+  .fm-rendered {
+    background: #0D0D0D;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 12px;
+  }
+
+  .fm-details {
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+
+  .fm-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #141414;
+    cursor: default;
+  }
+
+  .fm-triangle {
+    font-size: 8px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  .fm-summary-text {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .fm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 10px;
+  }
+
+  .fm-table th, .fm-table td {
+    padding: 6px 14px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+    text-align: left;
+  }
+
+  .fm-table th { color: #6B9FFF; width: 35%; font-weight: 400; }
+  .fm-table td { color: #888; }
+  .fm-table tr:last-child th,
+  .fm-table tr:last-child td { border-bottom: none; }
+
+  .fm-rendered-body {
+    padding: 12px 14px;
+  }
+
+  .fm-rendered-h1 {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+
+  .fm-rendered-dots {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.1);
+  }
+
+  @media (max-width: 768px) {
+    .fm-inner { grid-template-columns: 1fr; gap: 48px; }
+    .fm-section { padding: 60px 20px; }
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -775,6 +943,54 @@
     </p>
   </section>
 
+  <!-- FRONTMATTER SPOTLIGHT -->
+  <section class="fm-section">
+    <div class="fm-inner">
+      <div class="fm-text">
+        <p class="fm-eyebrow">unique to show.md</p>
+        <h2 class="fm-title">YAML frontmatter,<br><em>finally rendered.</em></h2>
+        <p class="fm-desc">Most markdown viewers ignore the <code>---</code> block at the top of your files. show.md parses it and surfaces it as a collapsible metadata table — collapsed by default so it never gets in the way, always one click away when you need it.</p>
+        <p class="fm-desc">Works with plain values, quoted strings, arrays, and multi-line folded blocks. Everything authors actually write.</p>
+      </div>
+      <div class="fm-visual">
+        <div class="fm-before">
+          <div class="fm-visual-label">raw file</div>
+          <pre class="fm-code"><span class="fm-delim">---</span>
+<span class="fm-key">title</span>: Agent instructions
+<span class="fm-key">description</span>: &gt;
+  Configures how the AI agent
+  behaves in this repository.
+<span class="fm-key">tags</span>: [agent, config, v2]
+<span class="fm-delim">---</span>
+
+<span class="fm-body"># Agent instructions
+...</span></pre>
+        </div>
+        <div class="fm-arrow">→</div>
+        <div class="fm-after">
+          <div class="fm-visual-label">show.md renders</div>
+          <div class="fm-rendered">
+            <div class="fm-details">
+              <div class="fm-summary">
+                <span class="fm-triangle">▶</span>
+                <span class="fm-summary-text">METADATA (3) — YAML FRONTMATTER</span>
+              </div>
+              <table class="fm-table">
+                <tr><th>title</th><td>Agent instructions</td></tr>
+                <tr><th>description</th><td>Configures how the AI agent behaves in this repository.</td></tr>
+                <tr><th>tags</th><td>agent, config, v2</td></tr>
+              </table>
+            </div>
+            <div class="fm-rendered-body">
+              <div class="fm-rendered-h1"># Agent instructions</div>
+              <div class="fm-rendered-dots">···</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FEATURES -->
   <section class="features" id="features">
     <p class="section-label">what it does</p>
@@ -790,9 +1006,9 @@
         <p class="feature-desc">Feels like it belongs. Respects system fonts, dark mode, and your keyboard.</p>
       </div>
       <div class="feature">
-        <div class="feature-icon">#</div>
-        <div class="feature-title">Full GFM</div>
-        <p class="feature-desc">Tables, code blocks, headings, task lists, strikethrough. Everything renders exactly as intended.</p>
+        <div class="feature-icon">≡</div>
+        <div class="feature-title">Frontmatter rendering</div>
+        <p class="feature-desc">YAML metadata rendered as a collapsible table. Collapsed by default, one click to expand. Unique to show.md.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">◎</div>
