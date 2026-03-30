@@ -64,6 +64,19 @@ public enum HTMLTemplate {
         """
     }
 
+    static func frontmatterHTML(_ fields: [(key: String, value: String)]) -> String {
+        guard !fields.isEmpty else { return "" }
+        let rows = fields.map { field in
+            "<tr><th>\(field.key)</th><td>\(field.value)</td></tr>"
+        }.joined(separator: "\n")
+        return """
+        <details class="frontmatter">
+          <summary>Frontmatter</summary>
+          <table>\(rows)</table>
+        </details>
+        """
+    }
+
     private static let css = """
         :root {
           --bg: #ffffff;
@@ -160,5 +173,39 @@ public enum HTMLTemplate {
           padding: 0;
           background: none;
         }
+        details.frontmatter {
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          margin-bottom: 24px;
+          overflow: hidden;
+        }
+        details.frontmatter summary {
+          cursor: pointer;
+          padding: 8px 12px;
+          font-size: 0.8em;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          color: var(--text);
+          opacity: 0.5;
+          background: var(--code-bg);
+          user-select: none;
+          list-style: none;
+        }
+        details.frontmatter summary::before {
+          content: '▶';
+          display: inline-block;
+          margin-right: 6px;
+          font-size: 0.7em;
+          transition: transform 0.15s;
+        }
+        details.frontmatter[open] summary::before { transform: rotate(90deg); }
+        details.frontmatter table {
+          width: 100%;
+          margin: 0;
+          border-radius: 0;
+          font-size: 0.85em;
+        }
+        details.frontmatter th { width: 30%; }
         """
 }

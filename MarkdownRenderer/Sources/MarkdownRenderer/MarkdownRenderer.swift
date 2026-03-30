@@ -6,9 +6,11 @@ public enum MarkdownRenderer {
         theme: Settings.Theme,
         fontSize: Settings.FontSize
     ) -> String {
-        let document = Document(parsing: markdown)
+        let fm = FrontmatterParser.parse(markdown)
+        let document = Document(parsing: fm.body)
         var visitor = HTMLVisitor()
-        let body = visitor.visit(document)
+        let contentBody = visitor.visit(document)
+        let body = HTMLTemplate.frontmatterHTML(fm.fields) + contentBody
         return HTMLTemplate.wrap(body: body, theme: theme, fontSize: fontSize)
     }
 
@@ -18,9 +20,12 @@ public enum MarkdownRenderer {
         fontSize: Settings.FontSize,
         defaultTab: Settings.Tab
     ) -> String {
-        let document = Document(parsing: markdown)
+        let fm = FrontmatterParser.parse(markdown)
+        let document = Document(parsing: fm.body)
         var visitor = HTMLVisitor()
-        let renderedBody = visitor.visit(document)
+        let contentBody = visitor.visit(document)
+        let renderedBody = HTMLTemplate.frontmatterHTML(fm.fields) + contentBody
+        // Source view shows the full original markdown including frontmatter
         let escaped = markdown
             .replacingOccurrences(of: "&", with: "&amp;")
             .replacingOccurrences(of: "<", with: "&lt;")
