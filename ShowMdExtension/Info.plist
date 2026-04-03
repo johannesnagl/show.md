@@ -26,6 +26,11 @@
             <array>
                 <string>net.daringfireball.markdown</string>
                 <string>public.markdown</string>
+                <string>io.github.showmd.mdx</string>
+                <string>io.github.showmd.mdc</string>
+                <string>io.github.showmd.rmd</string>
+                <string>io.github.showmd.qmd</string>
+                <string>io.github.showmd.mdown</string>
             </array>
             <key>QLSupportsSearchableItems</key>
             <false/>

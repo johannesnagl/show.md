@@ -65,6 +65,9 @@ struct HTMLVisitor: MarkupVisitor {
     }
 
     mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> String {
+        if codeBlock.language == "mermaid" {
+            return "<pre class=\"mermaid\">\(escape(codeBlock.code))</pre>\n"
+        }
         let lang = codeBlock.language.map { " class=\"language-\($0)\"" } ?? ""
         return "<pre><code\(lang)>\(escape(codeBlock.code))</code></pre>\n"
     }

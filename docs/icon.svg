@@ -1,13 +1,14 @@
 <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
   <rect width="64" height="64" rx="14" fill="#161616"/>
-  <!-- Document outline — path breaks at top-right where magnifier intersects -->
-  <path d="M 29,11 L 11,11 L 11,53 L 41,53 L 41,30"
-        fill="none" stroke="white" stroke-width="1.5"
-        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Document outline: rounded corners, open at bottom-right for lens -->
+  <path d="M 29,52 L 12,52 Q 9,52 9,49 L 9,8 Q 9,5 12,5 L 41,5 Q 44,5 44,8 L 44,36"
+        fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Content lines -->
+  <line x1="14" y1="16" x2="40" y2="16" stroke="white" stroke-width="1"   stroke-linecap="round" opacity="0.6"/>
+  <line x1="14" y1="22" x2="34" y2="22" stroke="white" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+  <line x1="14" y1="27" x2="37" y2="27" stroke="white" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
   <!-- Magnifier lens -->
-  <circle cx="39" cy="18" r="12"
-          fill="none" stroke="white" stroke-width="1.5"/>
-  <!-- Magnifier handle -->
-  <line x1="48" y1="27" x2="55" y2="34"
-        stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="41" cy="48" r="12" fill="rgba(62,181,176,0.07)" stroke="white" stroke-width="1.5"/>
+  <!-- Handle -->
+  <line x1="50" y1="57" x2="56" y2="62" stroke="white" stroke-width="3" stroke-linecap="round"/>
 </svg>

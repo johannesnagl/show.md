@@ -1566,11 +1566,13 @@
 <nav aria-label="Main navigation">
   <a href="/" class="nav-logo" aria-label="show.md — home">
     <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#222"/>
-      <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
-      <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
-      <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
-      <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
+      <path d="M 29,52 L 12,52 Q 9,52 9,49 L 9,8 Q 9,5 12,5 L 41,5 Q 44,5 44,8 L 44,36"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="14" y1="16" x2="40" y2="16" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      <line x1="14" y1="22" x2="34" y2="22" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+      <line x1="14" y1="27" x2="37" y2="27" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+      <circle cx="41" cy="48" r="12" fill="rgba(62,181,176,0.07)" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="50" y1="57" x2="56" y2="62" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
     </svg>
     <span>show</span>md
   </a>
@@ -1881,6 +1883,26 @@ $ npm run build · npm test · npm run lint</div>
         <div class="feature-icon">⬡</div>
         <h3 class="feature-title">Private by default</h3>
         <p class="feature-desc">No cloud. No uploads. No telemetry. Your files never leave your machine.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✦</div>
+        <h3 class="feature-title">Syntax highlighting</h3>
+        <p class="feature-desc">Code blocks rendered with language-aware highlighting. Supports 190+ languages out of the box.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">∑</div>
+        <h3 class="feature-title">LaTeX math</h3>
+        <p class="feature-desc">Inline <code style="font-family:ui-monospace,monospace;font-size:11px;background:var(--grid-line);padding:1px 5px;border-radius:3px">$x^2$</code> and block <code style="font-family:ui-monospace,monospace;font-size:11px;background:var(--grid-line);padding:1px 5px;border-radius:3px">$$...$$</code> expressions rendered beautifully via KaTeX.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">◇</div>
+        <h3 class="feature-title">Mermaid diagrams</h3>
+        <p class="feature-desc">Flowcharts, sequence diagrams, state machines, and more — rendered inline from code blocks.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📄</div>
+        <h3 class="feature-title">All markdown flavors</h3>
+        <p class="feature-desc">.md, .markdown, .mdx, .mdc, .rmd, .qmd, .mdown, .mkd, .mkdn — every markdown extension, one previewer.</p>
       </div>
     </div>
   </section>

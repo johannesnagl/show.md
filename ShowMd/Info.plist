@@ -20,5 +20,103 @@
     <string>$(MACOSX_DEPLOYMENT_TARGET)</string>
     <key>NSHumanReadableCopyright</key>
     <string></string>
+    <key>UTImportedTypeDeclarations</key>
+    <array>
+        <!-- MDX: Markdown + JSX (Next.js, Docusaurus, Storybook) -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.github.showmd.mdx</string>
+            <key>UTTypeDescription</key>
+            <string>MDX Document</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>mdx</string>
+                </array>
+            </dict>
+        </dict>
+        <!-- MDC: Markdown Components (Nuxt Content / Cursor rules) -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.github.showmd.mdc</string>
+            <key>UTTypeDescription</key>
+            <string>MDC Document</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>mdc</string>
+                </array>
+            </dict>
+        </dict>
+        <!-- R Markdown -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.github.showmd.rmd</string>
+            <key>UTTypeDescription</key>
+            <string>R Markdown Document</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>rmd</string>
+                    <string>Rmd</string>
+                </array>
+            </dict>
+        </dict>
+        <!-- Quarto Markdown -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.github.showmd.qmd</string>
+            <key>UTTypeDescription</key>
+            <string>Quarto Markdown Document</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>qmd</string>
+                </array>
+            </dict>
+        </dict>
+        <!-- Alternate markdown extensions -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.github.showmd.mdown</string>
+            <key>UTTypeDescription</key>
+            <string>Markdown Document</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>mdown</string>
+                    <string>mkd</string>
+                    <string>mkdn</string>
+                    <string>mdtext</string>
+                    <string>mdtxt</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
 </dict>
 </plist>

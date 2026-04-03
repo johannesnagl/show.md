@@ -7,9 +7,11 @@ public enum HTMLTemplate {
           <meta charset="UTF-8">
           <meta name="color-scheme" content="light dark">
           <style>\(css)</style>
+          \(richFeatureHead)
         </head>
         <body>
         \(body)
+        \(richFeatureScripts)
         </body>
         </html>
         """
@@ -39,10 +41,12 @@ public enum HTMLTemplate {
             font-size: 1em; border-radius: 0; padding: 0; background: none;
           }
           </style>
+          \(richFeatureHead)
         </head>
         <body>
           <div class="view-rendered">\(renderedBody)</div>
           <div class="view-source">\(sourceBody)</div>
+        \(richFeatureScripts)
         </body>
         </html>
         """
@@ -77,6 +81,55 @@ public enum HTMLTemplate {
         </details>
         """
     }
+
+    // MARK: - Rich features (syntax highlighting, math, diagrams)
+
+    private static let richFeatureHead = """
+        <!-- Syntax Highlighting -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+        <style>
+          [data-theme="light"] .hljs { background: var(--code-bg); }
+          [data-theme="dark"] .hljs { background: var(--code-bg); }
+          .mermaid { text-align: center; margin-bottom: 16px; }
+          .mermaid svg { max-width: 100%; height: auto; }
+          .katex-display { margin: 16px 0; overflow-x: auto; }
+        </style>
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+        """
+
+    private static let richFeatureScripts = """
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          // Syntax highlighting — only code blocks with a specified language
+          document.querySelectorAll('pre code[class*="language-"]').forEach(function(el) {
+            if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+          });
+          // KaTeX auto-render for $...$ and $$...$$ math expressions
+          if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.body, {
+              delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+              ],
+              throwOnError: false,
+              ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            });
+          }
+          // Mermaid diagrams — detect theme
+          if (typeof mermaid !== 'undefined') {
+            var dt = document.documentElement.getAttribute('data-theme');
+            var isDark = dt === 'dark' || (dt === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            mermaid.initialize({ startOnLoad: true, theme: isDark ? 'dark' : 'default' });
+          }
+        });
+        </script>
+        """
 
     private static let css = """
         :root {

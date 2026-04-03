@@ -1,7 +1,17 @@
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="14" fill="#161616"/>
-  <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
-  <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
-  <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
-  <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Document outline: rounded corners, open only where lens breaks through -->
+  <path d="M 92,164 L 34,164 Q 24,164 24,154 L 24,22 Q 24,12 34,12 L 130,12 Q 140,12 140,22 L 140,116"
+        fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Content lines -->
+  <line x1="42" y1="44"  x2="126" y2="44"  stroke="white" stroke-width="3"   stroke-linecap="round" opacity="0.6"/>
+  <line x1="42" y1="62"  x2="106" y2="62"  stroke="white" stroke-width="2"   stroke-linecap="round" opacity="0.3"/>
+  <line x1="42" y1="78"  x2="120" y2="78"  stroke="white" stroke-width="2"   stroke-linecap="round" opacity="0.3"/>
+  <line x1="42" y1="94"  x2="86"  y2="94"  stroke="white" stroke-width="2"   stroke-linecap="round" opacity="0.22"/>
+
+  <!-- Magnifier lens at bottom-right corner -->
+  <circle cx="132" cy="156" r="40" fill="rgba(62,181,176,0.06)" stroke="white" stroke-width="4.5"/>
+
+  <!-- Magnifier handle -->
+  <line x1="160" y1="184" x2="178" y2="198" stroke="white" stroke-width="9" stroke-linecap="round"/>
 </svg>
