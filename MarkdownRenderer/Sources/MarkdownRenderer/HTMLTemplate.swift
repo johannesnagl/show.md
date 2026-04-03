@@ -289,5 +289,82 @@ public enum HTMLTemplate {
         .footnotes { font-size: 0.85em; opacity: 0.85; }
         .footnotes ol { padding-left: 20px; }
         .footnote-backref { text-decoration: none; margin-left: 4px; }
+
+        /* GitHub-style alerts */
+        .markdown-alert {
+          border-left: 4px solid;
+          border-radius: 6px;
+          padding: 12px 16px;
+          margin-bottom: 16px;
+          background: var(--code-bg);
+        }
+        .markdown-alert > :last-child { margin-bottom: 0; }
+        .markdown-alert-title {
+          font-weight: 600;
+          font-size: 0.9em;
+          margin-bottom: 4px;
+        }
+        .markdown-alert-note { border-left-color: #1f6feb; }
+        .markdown-alert-note .markdown-alert-title { color: #4493f8; }
+        .markdown-alert-tip { border-left-color: #238636; }
+        .markdown-alert-tip .markdown-alert-title { color: #3fb950; }
+        .markdown-alert-important { border-left-color: #8957e5; }
+        .markdown-alert-important .markdown-alert-title { color: #ab7df8; }
+        .markdown-alert-warning { border-left-color: #d29922; }
+        .markdown-alert-warning .markdown-alert-title { color: #d29922; }
+        .markdown-alert-caution { border-left-color: #da3633; }
+        .markdown-alert-caution .markdown-alert-title { color: #f85149; }
+
+        /* Agentic AI XML-like tags — render as visible labeled blocks */
+        example, instructions, rule, context, important,
+        example-agent, system-prompt, user-prompt, assistant-response,
+        tool-use, tool-result, thinking, reflection, planning,
+        constraints, guidelines, persona, task, step, output-format {
+          display: block;
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          padding: 12px 16px;
+          margin: 12px 0;
+          position: relative;
+          padding-top: 28px;
+        }
+        example::before { content: "<example>"; }
+        instructions::before { content: "<instructions>"; }
+        rule::before { content: "<rule>"; }
+        context::before { content: "<context>"; }
+        important::before { content: "<important>"; }
+        example-agent::before { content: "<example-agent>"; }
+        system-prompt::before { content: "<system-prompt>"; }
+        user-prompt::before { content: "<user-prompt>"; }
+        assistant-response::before { content: "<assistant-response>"; }
+        tool-use::before { content: "<tool-use>"; }
+        tool-result::before { content: "<tool-result>"; }
+        thinking::before { content: "<thinking>"; }
+        reflection::before { content: "<reflection>"; }
+        planning::before { content: "<planning>"; }
+        constraints::before { content: "<constraints>"; }
+        guidelines::before { content: "<guidelines>"; }
+        persona::before { content: "<persona>"; }
+        task::before { content: "<task>"; }
+        step::before { content: "<step>"; }
+        output-format::before { content: "<output-format>"; }
+        example::before, instructions::before, rule::before,
+        context::before, important::before, example-agent::before,
+        system-prompt::before, user-prompt::before, assistant-response::before,
+        tool-use::before, tool-result::before, thinking::before,
+        reflection::before, planning::before, constraints::before,
+        guidelines::before, persona::before, task::before,
+        step::before, output-format::before {
+          position: absolute;
+          top: 4px;
+          left: 8px;
+          font-size: 0.7em;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          opacity: 0.45;
+          letter-spacing: 0.02em;
+        }
+        important { border-color: #d29922; background: rgba(210, 153, 34, 0.06); }
+        example { border-color: #238636; background: rgba(35, 134, 54, 0.06); }
+        thinking, reflection, planning { border-style: dashed; opacity: 0.8; }
         """
 }

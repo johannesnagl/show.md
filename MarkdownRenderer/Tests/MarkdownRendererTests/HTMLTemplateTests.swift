@@ -128,4 +128,25 @@ import Testing
         let html = HTMLTemplate.frontmatterHTML([])
         #expect(html == "")
     }
+
+    // MARK: - GitHub alerts CSS
+
+    @Test func wrapIncludesAlertStyles() {
+        let html = HTMLTemplate.wrap(body: "<p>hi</p>", theme: .auto, fontSize: .medium)
+        #expect(html.contains(".markdown-alert"))
+        #expect(html.contains(".markdown-alert-note"))
+        #expect(html.contains(".markdown-alert-warning"))
+        #expect(html.contains(".markdown-alert-caution"))
+        #expect(html.contains(".markdown-alert-tip"))
+        #expect(html.contains(".markdown-alert-important"))
+    }
+
+    // MARK: - Agentic XML tag CSS
+
+    @Test func wrapIncludesAgenticTagStyles() {
+        let html = HTMLTemplate.wrap(body: "<p>hi</p>", theme: .auto, fontSize: .medium)
+        #expect(html.contains("example::before"))
+        #expect(html.contains("instructions::before"))
+        #expect(html.contains("thinking::before"))
+    }
 }

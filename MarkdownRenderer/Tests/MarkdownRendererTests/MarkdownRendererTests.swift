@@ -38,4 +38,25 @@ import Testing
         #expect(html.contains("&amp;"))
         #expect(!html.contains("a & b"))
     }
+
+    @Test func renderGitHubAlertNote() {
+        let md = """
+        > [!NOTE]
+        > This is a note about something important
+        """
+        let html = MarkdownRenderer.render(md, theme: .auto, fontSize: .medium)
+        #expect(html.contains("markdown-alert-note"))
+        #expect(html.contains("This is a note about something important"))
+        #expect(!html.contains("[!NOTE]"))
+    }
+
+    @Test func renderGitHubAlertWarning() {
+        let md = """
+        > [!WARNING]
+        > Do not delete the entitlement
+        """
+        let html = MarkdownRenderer.render(md, theme: .auto, fontSize: .medium)
+        #expect(html.contains("markdown-alert-warning"))
+        #expect(html.contains("Do not delete the entitlement"))
+    }
 }

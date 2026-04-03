@@ -4,6 +4,7 @@ enum HTMLPostProcessor {
     /// Applies all post-processing transformations to rendered HTML body.
     static func process(_ html: String) -> String {
         var result = html
+        result = convertGitHubAlerts(result)
         result = convertFootnotes(result)
         result = transformTextSegments(result) { text in
             var t = text
@@ -189,6 +190,53 @@ enum HTMLPostProcessor {
 
     static func convertSmartQuotes(_ html: String) -> String {
         transformTextSegments(html) { applySmartQuotes($0) }
+    }
+
+    // MARK: - GitHub-style alerts
+
+    private static let alertPattern = try! NSRegularExpression(
+        pattern: "<blockquote>\\s*<p>\\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\\]\\s*(?:<br>\\s*)?\\n?(.*?)</p>([\\s\\S]*?)</blockquote>",
+        options: .caseInsensitive
+    )
+
+    private static let alertIcons: [String: String] = [
+        "NOTE": "\u{2139}\u{FE0F}",      // ℹ️
+        "TIP": "\u{1F4A1}",               // 💡
+        "IMPORTANT": "\u{2757}",           // ❗
+        "WARNING": "\u{26A0}\u{FE0F}",    // ⚠️
+        "CAUTION": "\u{1F6D1}",           // 🛑
+    ]
+
+    static func convertGitHubAlerts(_ html: String) -> String {
+        let mutable = NSMutableString(string: html)
+        let fullRange = NSRange(location: 0, length: mutable.length)
+        let matches = alertPattern.matches(in: html, range: fullRange).reversed()
+
+        for match in matches {
+            guard let typeRange = Range(match.range(at: 1), in: html),
+                  let firstLineRange = Range(match.range(at: 2), in: html),
+                  let restRange = Range(match.range(at: 3), in: html) else { continue }
+
+            let type = String(html[typeRange]).uppercased()
+            let firstLine = String(html[firstLineRange])
+            let rest = String(html[restRange])
+            let icon = alertIcons[type] ?? ""
+            let cssClass = type.lowercased()
+
+            var body = "<p>\(firstLine)</p>"
+            if !rest.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                body += rest
+            }
+
+            let replacement = """
+                <div class="markdown-alert markdown-alert-\(cssClass)">
+                <p class="markdown-alert-title">\(icon) \(type.capitalized)</p>
+                \(body)
+                </div>
+                """
+            mutable.replaceCharacters(in: match.range, with: replacement)
+        }
+        return mutable as String
     }
 
     // MARK: - Footnotes

@@ -222,6 +222,10 @@ When adding a feature, always add tests for:
 cd MarkdownRenderer && swift test
 ```
 
+### Test markdown fixture files
+
+The `tests/fixtures/` directory contains comprehensive `.md` files that exercise every renderer feature (alerts, XML tags, code blocks, math, mermaid, frontmatter, emoji, etc.). After making rendering changes, open these files in Finder and press Space to verify Quick Look output. Keep these files up to date when adding new features.
+
 ### What's NOT yet tested (future work)
 
 - `renderCombined()` public API (combines rendered + source views)

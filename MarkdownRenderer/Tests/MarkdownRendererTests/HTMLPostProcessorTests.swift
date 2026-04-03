@@ -190,6 +190,57 @@ import Testing
         #expect(!html.contains("'trap'"))
     }
 
+    // MARK: - GitHub-style alerts
+
+    @Test func alertNoteConverted() {
+        let input = "<blockquote>\n<p>[!NOTE]<br>\nThis is a note</p>\n</blockquote>"
+        let result = HTMLPostProcessor.convertGitHubAlerts(input)
+        #expect(result.contains("markdown-alert-note"))
+        #expect(result.contains("markdown-alert-title"))
+        #expect(result.contains("Note"))
+        #expect(result.contains("This is a note"))
+        #expect(!result.contains("<blockquote>"))
+    }
+
+    @Test func alertAllTypesConverted() {
+        let types = ["NOTE", "TIP", "IMPORTANT", "WARNING", "CAUTION"]
+        for type in types {
+            let input = "<blockquote>\n<p>[!\(type)]<br>\nContent for \(type)</p>\n</blockquote>"
+            let result = HTMLPostProcessor.convertGitHubAlerts(input)
+            #expect(result.contains("markdown-alert-\(type.lowercased())"),
+                    "Alert type \(type) should produce class markdown-alert-\(type.lowercased())")
+            #expect(result.contains("Content for \(type)"))
+        }
+    }
+
+    @Test func alertCaseInsensitive() {
+        let input = "<blockquote>\n<p>[!note]<br>\nLowercase note</p>\n</blockquote>"
+        let result = HTMLPostProcessor.convertGitHubAlerts(input)
+        #expect(result.contains("markdown-alert-note"))
+    }
+
+    @Test func alertMultiParagraph() {
+        let input = "<blockquote>\n<p>[!WARNING]<br>\nFirst line</p>\n<p>Second paragraph</p>\n</blockquote>"
+        let result = HTMLPostProcessor.convertGitHubAlerts(input)
+        #expect(result.contains("markdown-alert-warning"))
+        #expect(result.contains("First line"))
+        #expect(result.contains("Second paragraph"))
+    }
+
+    @Test func alertRegularBlockquoteUnchanged() {
+        let input = "<blockquote>\n<p>Just a regular quote</p>\n</blockquote>"
+        let result = HTMLPostProcessor.convertGitHubAlerts(input)
+        #expect(result.contains("<blockquote>"))
+        #expect(!result.contains("markdown-alert"))
+    }
+
+    @Test func alertInFullPipeline() {
+        let input = "<blockquote>\n<p>[!TIP]<br>\nUse :rocket: for speed</p>\n</blockquote>"
+        let result = HTMLPostProcessor.process(input)
+        #expect(result.contains("markdown-alert-tip"))
+        #expect(result.contains("🚀"))
+    }
+
     // MARK: - Full pipeline
 
     @Test func processAppliesAllTransformations() {
