@@ -38,4 +38,9 @@ public struct Settings {
         get { FontSize(rawValue: userDefaults.string(forKey: "fontSize") ?? "") ?? .medium }
         set { userDefaults.set(newValue.rawValue, forKey: "fontSize") }
     }
+
+    public static var mermaidEnabled: Bool {
+        get { userDefaults.object(forKey: "mermaidEnabled") as? Bool ?? false }
+        set { userDefaults.set(newValue, forKey: "mermaidEnabled") }
+    }
 }

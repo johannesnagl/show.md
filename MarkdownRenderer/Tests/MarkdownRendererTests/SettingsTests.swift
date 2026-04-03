@@ -47,4 +47,13 @@ private let testSuiteName = "test.settings"
         Settings.userDefaults.set("garbage", forKey: "defaultTab")
         #expect(Settings.defaultTab == .rendered)
     }
+
+    @Test func mermaidDefaultsToFalse() {
+        #expect(Settings.mermaidEnabled == false)
+    }
+
+    @Test func mermaidRoundTrips() {
+        Settings.mermaidEnabled = true
+        #expect(Settings.mermaidEnabled == true)
+    }
 }

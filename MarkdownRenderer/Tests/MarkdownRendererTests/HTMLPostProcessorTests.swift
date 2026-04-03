@@ -21,9 +21,14 @@ import Testing
         #expect(result == ":not_a_real_emoji:")
     }
 
-    @Test func emojiInsideHTMLAttributeUnchanged() {
-        let result = HTMLPostProcessor.convertEmojiShortcodes("<img alt=\":smile:\">")
-        #expect(result == "<img alt=\":smile:\">")
+    @Test func emojiInsideCodeBlockUnchanged() {
+        let result = HTMLPostProcessor.convertEmojiShortcodes("<pre><code>:smile:</code></pre>")
+        #expect(result == "<pre><code>:smile:</code></pre>")
+    }
+
+    @Test func emojiInsideInlineCodeUnchanged() {
+        let result = HTMLPostProcessor.convertEmojiShortcodes("<p>Use <code>:smile:</code> syntax</p>")
+        #expect(result.contains("<code>:smile:</code>"))
     }
 
     // MARK: - Highlight
@@ -39,11 +44,21 @@ import Testing
         #expect(result.contains("<mark>two</mark>"))
     }
 
+    @Test func highlightInsideCodeBlockUnchanged() {
+        let result = HTMLPostProcessor.convertHighlight("<pre><code>a == b</code></pre>")
+        #expect(result == "<pre><code>a == b</code></pre>")
+    }
+
     // MARK: - Superscript
 
     @Test func superscriptConverted() {
         let result = HTMLPostProcessor.convertSuperscript("<p>x^2^</p>")
         #expect(result.contains("<sup>2</sup>"))
+    }
+
+    @Test func superscriptInsideCodeBlockUnchanged() {
+        let result = HTMLPostProcessor.convertSuperscript("<pre><code>x^2^</code></pre>")
+        #expect(result == "<pre><code>x^2^</code></pre>")
     }
 
     // MARK: - Subscript
@@ -58,6 +73,11 @@ import Testing
         #expect(result == "<del>struck</del>")
     }
 
+    @Test func subscriptInsideCodeBlockUnchanged() {
+        let result = HTMLPostProcessor.convertSubscript("<pre><code>H~2~O</code></pre>")
+        #expect(result == "<pre><code>H~2~O</code></pre>")
+    }
+
     // MARK: - Autolinks
 
     @Test func autolinkConverted() {
@@ -68,12 +88,17 @@ import Testing
     @Test func autolinkDoesNotDoubleWrap() {
         let input = "<a href=\"https://example.com\">https://example.com</a>"
         let result = HTMLPostProcessor.convertAutolinks(input)
-        // Should not create nested anchors
         #expect(!result.contains("<a href=\"https://example.com\"><a"))
     }
 
     @Test func autolinkSkipsExistingHref() {
         let input = "<a href=\"https://example.com\">link</a>"
+        let result = HTMLPostProcessor.convertAutolinks(input)
+        #expect(result == input)
+    }
+
+    @Test func autolinkInsideCodeBlockUnchanged() {
+        let input = "<pre><code>https://example.com</code></pre>"
         let result = HTMLPostProcessor.convertAutolinks(input)
         #expect(result == input)
     }
@@ -88,6 +113,18 @@ import Testing
     @Test func smartApostrophe() {
         let result = HTMLPostProcessor.convertSmartQuotes("<p>it's fine</p>")
         #expect(result.contains("it\u{2019}s"))
+    }
+
+    @Test func smartQuotesDoNotCorruptHTMLAttributes() {
+        let input = "<a href=\"https://example.com\">link</a>"
+        let result = HTMLPostProcessor.convertSmartQuotes(input)
+        #expect(result.contains("href=\"https://example.com\""))
+    }
+
+    @Test func smartQuotesInsideCodeBlockUnchanged() {
+        let input = "<pre><code>\"hello\"</code></pre>"
+        let result = HTMLPostProcessor.convertSmartQuotes(input)
+        #expect(result == input)
     }
 
     // MARK: - Footnotes
@@ -116,6 +153,26 @@ import Testing
         #expect(result.contains("Note B."))
     }
 
+    @Test func footnoteIdEscaped() {
+        let input = "<p>Text[^x\"y]</p>\n<p>[^x\"y]: Note.</p>\n"
+        let result = HTMLPostProcessor.convertFootnotes(input)
+        #expect(result.contains("fn-x&quot;y"))
+        #expect(!result.contains("fn-x\"y"))
+    }
+
+    // MARK: - XSS protection
+
+    @Test func frontmatterXSSEscaped() {
+        let html = HTMLTemplate.frontmatterHTML([
+            (key: "<script>alert(1)</script>", value: "<img src=x onerror=alert(1)>")
+        ])
+        #expect(html.contains("&lt;script&gt;"))
+        #expect(html.contains("&lt;img"))
+        // Raw HTML tags must be escaped — no executable tags in output
+        #expect(!html.contains("<script>"))
+        #expect(!html.contains("<img"))
+    }
+
     // MARK: - Full pipeline
 
     @Test func processAppliesAllTransformations() {
@@ -125,5 +182,14 @@ import Testing
         #expect(result.contains("<mark>highlight</mark>"))
         #expect(result.contains("<sup>2</sup>"))
         #expect(result.contains("<sub>2</sub>"))
+    }
+
+    @Test func processSkipsCodeBlocks() {
+        let input = "<p>:smile:</p>\n<pre><code>:smile: == x^2^ ~sub~ \"quoted\"</code></pre>\n"
+        let result = HTMLPostProcessor.process(input)
+        // Text outside code should be transformed
+        #expect(result.contains("😄"))
+        // Code block should be untouched
+        #expect(result.contains("<code>:smile: == x^2^ ~sub~ \"quoted\"</code>"))
     }
 }

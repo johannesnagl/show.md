@@ -79,8 +79,8 @@ struct HTMLVisitor: MarkupVisitor {
         "<hr>\n"
     }
 
-    mutating func visitHTMLBlock(_ html: HTMLBlock) -> String { "" }
-    mutating func visitInlineHTML(_ html: InlineHTML) -> String { "" }
+    mutating func visitHTMLBlock(_ html: HTMLBlock) -> String { html.rawHTML }
+    mutating func visitInlineHTML(_ html: InlineHTML) -> String { html.rawHTML }
 
     // MARK: - Lists
 
@@ -130,10 +130,6 @@ struct HTMLVisitor: MarkupVisitor {
     // MARK: - Helpers
 
     private func escape(_ string: String) -> String {
-        string
-            .replacingOccurrences(of: "&", with: "&amp;")
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-            .replacingOccurrences(of: "\"", with: "&quot;")
+        HTMLEscape.escape(string)
     }
 }

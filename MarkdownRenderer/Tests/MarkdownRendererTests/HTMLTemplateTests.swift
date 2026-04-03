@@ -48,9 +48,14 @@ import Testing
         #expect(html.contains(".katex"))
     }
 
-    @Test func wrapIncludesInlinedMermaid() {
-        let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
+    @Test func wrapIncludesMermaidWhenEnabled() {
+        let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium, mermaid: true)
         #expect(html.contains("mermaid.initialize"))
+    }
+
+    @Test func wrapExcludesMermaidWhenDisabled() {
+        let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium, mermaid: false)
+        #expect(!html.contains("mermaid.initialize"))
     }
 
     @Test func wrapHasNoCDNReferences() {
@@ -65,7 +70,8 @@ import Testing
             sourceBody: "<pre><code>hi</code></pre>",
             theme: .auto,
             fontSize: .medium,
-            defaultTab: .rendered
+            defaultTab: .rendered,
+            mermaid: true
         )
         #expect(html.contains("hljs.highlightElement"))
         #expect(html.contains("renderMathInElement"))

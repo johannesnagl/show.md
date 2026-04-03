@@ -5,35 +5,80 @@ enum HTMLPostProcessor {
     static func process(_ html: String) -> String {
         var result = html
         result = convertFootnotes(result)
-        result = convertEmojiShortcodes(result)
-        result = convertHighlight(result)
-        result = convertSuperscript(result)
-        result = convertSubscript(result)
-        result = convertAutolinks(result)
-        result = convertSmartQuotes(result)
+        result = transformTextSegments(result) { text in
+            var t = text
+            t = applyEmojiShortcodes(t)
+            t = applyHighlight(t)
+            t = applySuperscript(t)
+            t = applySubscript(t)
+            t = applyAutolinks(t)
+            t = applySmartQuotes(t)
+            return t
+        }
         return result
     }
 
-    // MARK: - Emoji shortcodes
+    // MARK: - Text segment extraction
+
+    /// Splits HTML into protected regions (tags, <pre>…</pre>, <code>…</code>)
+    /// and text regions. Only text regions are passed to the transform closure.
+    static func transformTextSegments(_ html: String, transform: (String) -> String) -> String {
+        // Match HTML tags and <pre>…</pre> / <code>…</code> blocks
+        let protectedPattern = try! NSRegularExpression(
+            pattern: "<pre[^>]*>[\\s\\S]*?</pre>|<code[^>]*>[\\s\\S]*?</code>|<a [^>]*>[\\s\\S]*?</a>|<[^>]+>",
+            options: .caseInsensitive
+        )
+        let range = NSRange(html.startIndex..., in: html)
+        let matches = protectedPattern.matches(in: html, range: range)
+
+        var result = ""
+        var lastEnd = html.startIndex
+
+        for match in matches {
+            guard let matchRange = Range(match.range, in: html) else { continue }
+            // Transform the text segment before this match
+            if lastEnd < matchRange.lowerBound {
+                let textSegment = String(html[lastEnd..<matchRange.lowerBound])
+                result += transform(textSegment)
+            }
+            // Append the protected region unchanged
+            result += html[matchRange]
+            lastEnd = matchRange.upperBound
+        }
+
+        // Transform any remaining text after the last match
+        if lastEnd < html.endIndex {
+            let textSegment = String(html[lastEnd...])
+            result += transform(textSegment)
+        }
+
+        return result
+    }
+
+    // MARK: - Emoji shortcodes (operates on text segments only)
 
     private static let emojiPattern = try! NSRegularExpression(
         pattern: ":([a-zA-Z0-9_+-]+):",
         options: []
     )
 
-    static func convertEmojiShortcodes(_ html: String) -> String {
-        let range = NSRange(html.startIndex..., in: html)
-        let result = NSMutableString(string: html)
-        let matches = emojiPattern.matches(in: html, range: range).reversed()
+    static func applyEmojiShortcodes(_ text: String) -> String {
+        let range = NSRange(text.startIndex..., in: text)
+        let result = NSMutableString(string: text)
+        let matches = emojiPattern.matches(in: text, range: range).reversed()
         for match in matches {
-            guard let codeRange = Range(match.range(at: 1), in: html) else { continue }
-            let code = String(html[codeRange])
-            if insideHTMLTag(html: html, matchRange: match.range) { continue }
+            guard let codeRange = Range(match.range(at: 1), in: text) else { continue }
+            let code = String(text[codeRange])
             if let emoji = emojiMap[code] {
                 result.replaceCharacters(in: match.range, with: emoji)
             }
         }
         return result as String
+    }
+
+    // Keep public wrappers for backward-compatible test access
+    static func convertEmojiShortcodes(_ html: String) -> String {
+        transformTextSegments(html) { applyEmojiShortcodes($0) }
     }
 
     // MARK: - ==highlight==
@@ -43,12 +88,16 @@ enum HTMLPostProcessor {
         options: []
     )
 
-    static func convertHighlight(_ html: String) -> String {
-        let range = NSRange(html.startIndex..., in: html)
+    static func applyHighlight(_ text: String) -> String {
+        let range = NSRange(text.startIndex..., in: text)
         return highlightPattern.stringByReplacingMatches(
-            in: html, range: range,
+            in: text, range: range,
             withTemplate: "<mark>$1</mark>"
         )
+    }
+
+    static func convertHighlight(_ html: String) -> String {
+        transformTextSegments(html) { applyHighlight($0) }
     }
 
     // MARK: - ^superscript^
@@ -58,12 +107,16 @@ enum HTMLPostProcessor {
         options: []
     )
 
-    static func convertSuperscript(_ html: String) -> String {
-        let range = NSRange(html.startIndex..., in: html)
+    static func applySuperscript(_ text: String) -> String {
+        let range = NSRange(text.startIndex..., in: text)
         return superPattern.stringByReplacingMatches(
-            in: html, range: range,
+            in: text, range: range,
             withTemplate: "<sup>$1</sup>"
         )
+    }
+
+    static func convertSuperscript(_ html: String) -> String {
+        transformTextSegments(html) { applySuperscript($0) }
     }
 
     // MARK: - ~subscript~ (single tilde only, not ~~ strikethrough)
@@ -73,64 +126,74 @@ enum HTMLPostProcessor {
         options: []
     )
 
-    static func convertSubscript(_ html: String) -> String {
-        let range = NSRange(html.startIndex..., in: html)
+    static func applySubscript(_ text: String) -> String {
+        let range = NSRange(text.startIndex..., in: text)
         return subPattern.stringByReplacingMatches(
-            in: html, range: range,
+            in: text, range: range,
             withTemplate: "<sub>$1</sub>"
         )
+    }
+
+    static func convertSubscript(_ html: String) -> String {
+        transformTextSegments(html) { applySubscript($0) }
     }
 
     // MARK: - Autolinks
 
     private static let autolinkPattern = try! NSRegularExpression(
-        pattern: "(?<![\"=/>a-zA-Z])(https?://[^\\s<>\"')+\\]]+)",
+        pattern: "(https?://[^\\s<>\"')+\\]]+)",
         options: []
     )
 
-    static func convertAutolinks(_ html: String) -> String {
-        let range = NSRange(html.startIndex..., in: html)
-        let result = NSMutableString(string: html)
-        let matches = autolinkPattern.matches(in: html, range: range).reversed()
+    static func applyAutolinks(_ text: String) -> String {
+        let range = NSRange(text.startIndex..., in: text)
+        let result = NSMutableString(string: text)
+        let matches = autolinkPattern.matches(in: text, range: range).reversed()
         for match in matches {
-            if insideHTMLTag(html: html, matchRange: match.range) { continue }
-            if insideAnchor(html: html, matchRange: match.range) { continue }
-            guard let urlRange = Range(match.range(at: 1), in: html) else { continue }
-            let url = String(html[urlRange])
+            guard let urlRange = Range(match.range(at: 1), in: text) else { continue }
+            let url = HTMLEscape.escape(String(text[urlRange]))
             result.replaceCharacters(in: match.range, with: "<a href=\"\(url)\">\(url)</a>")
         }
         return result as String
     }
 
-    // MARK: - Smart quotes
+    static func convertAutolinks(_ html: String) -> String {
+        transformTextSegments(html) { applyAutolinks($0) }
+    }
 
-    static func convertSmartQuotes(_ html: String) -> String {
-        var result = html
-        // Double quotes: opening after whitespace/start, closing before whitespace/end/punctuation
+    // MARK: - Smart quotes (operates on text segments only — no HTML attributes)
+
+    static func applySmartQuotes(_ text: String) -> String {
+        var result = text
+        // Double quotes
         result = result.replacingOccurrences(
-            of: "(^|[\\s(>])\"([^\"]*?)\"",
-            with: "$1\u{201C}$2\u{201D}",
+            of: "\"([^\"]*?)\"",
+            with: "\u{201C}$1\u{201D}",
             options: .regularExpression
         )
-        // Single quotes: apostrophes and opening/closing
+        // Apostrophes
         result = result.replacingOccurrences(
             of: "(?<=[a-zA-Z])'(?=[a-zA-Z])",
             with: "\u{2019}",
             options: .regularExpression
         )
+        // Single quotes
         result = result.replacingOccurrences(
-            of: "(^|[\\s(>])'([^']*?)'",
-            with: "$1\u{2018}$2\u{2019}",
+            of: "'([^']*?)'",
+            with: "\u{2018}$1\u{2019}",
             options: .regularExpression
         )
         return result
+    }
+
+    static func convertSmartQuotes(_ html: String) -> String {
+        transformTextSegments(html) { applySmartQuotes($0) }
     }
 
     // MARK: - Footnotes
 
     /// Converts `[^id]` references and `[^id]: content` definitions into HTML footnotes.
     static func convertFootnotes(_ html: String) -> String {
-        // Extract definitions: <p>[^id]: content</p>
         let defPattern = try! NSRegularExpression(
             pattern: "<p>\\[\\^([^\\]]+)\\]:\\s*(.+?)</p>",
             options: .dotMatchesLineSeparators
@@ -146,12 +209,11 @@ enum HTMLPostProcessor {
 
         guard !definitions.isEmpty else { return html }
 
-        // Remove definition paragraphs
         var result = defPattern.stringByReplacingMatches(in: html, range: range, withTemplate: "")
 
-        // Replace references [^id] with superscript links
         for (index, def) in definitions.enumerated() {
             let num = index + 1
+            let safeId = HTMLEscape.escape(def.id)
             let escapedId = NSRegularExpression.escapedPattern(for: def.id)
             let refPattern = try! NSRegularExpression(
                 pattern: "\\[\\^\(escapedId)\\]",
@@ -160,43 +222,19 @@ enum HTMLPostProcessor {
             let refRange = NSRange(result.startIndex..., in: result)
             result = refPattern.stringByReplacingMatches(
                 in: result, range: refRange,
-                withTemplate: "<sup class=\"footnote-ref\"><a href=\"#fn-\(def.id)\" id=\"fnref-\(def.id)\">\(num)</a></sup>"
+                withTemplate: "<sup class=\"footnote-ref\"><a href=\"#fn-\(safeId)\" id=\"fnref-\(safeId)\">\(num)</a></sup>"
             )
         }
 
-        // Append footnote section
         var section = "<hr class=\"footnotes-sep\">\n<section class=\"footnotes\">\n<ol>\n"
         for def in definitions {
-            section += "<li id=\"fn-\(def.id)\"><p>\(def.content) <a href=\"#fnref-\(def.id)\" class=\"footnote-backref\">\u{21A9}</a></p></li>\n"
+            let safeId = HTMLEscape.escape(def.id)
+            section += "<li id=\"fn-\(safeId)\"><p>\(def.content) <a href=\"#fnref-\(safeId)\" class=\"footnote-backref\">\u{21A9}</a></p></li>\n"
         }
         section += "</ol>\n</section>\n"
         result += section
 
         return result
-    }
-
-    // MARK: - Helpers
-
-    private static func insideHTMLTag(html: String, matchRange: NSRange) -> Bool {
-        guard let range = Range(matchRange, in: html) else { return false }
-        let before = html[html.startIndex..<range.lowerBound]
-        let lastOpen = before.lastIndex(of: "<")
-        let lastClose = before.lastIndex(of: ">")
-        if let open = lastOpen {
-            if let close = lastClose {
-                return open > close
-            }
-            return true
-        }
-        return false
-    }
-
-    private static func insideAnchor(html: String, matchRange: NSRange) -> Bool {
-        guard let range = Range(matchRange, in: html) else { return false }
-        let before = String(html[html.startIndex..<range.lowerBound])
-        let openCount = before.components(separatedBy: "<a ").count - 1
-        let closeCount = before.components(separatedBy: "</a>").count - 1
-        return openCount > closeCount
     }
 
     // MARK: - Emoji map (common shortcodes)
@@ -219,14 +257,12 @@ enum HTMLPostProcessor {
         "mask": "😷", "sunglasses": "😎", "dizzy_face": "😵", "imp": "👿",
         "smiling_imp": "😈", "neutral_face": "😐", "no_mouth": "😶",
         "innocent": "😇", "alien": "👽",
-        // Hand gestures
         "thumbsup": "👍", "+1": "👍", "thumbsdown": "👎", "-1": "👎",
         "ok_hand": "👌", "punch": "👊", "fist": "✊", "v": "✌️",
         "wave": "👋", "hand": "✋", "open_hands": "👐", "point_up": "☝️",
         "point_down": "👇", "point_left": "👈", "point_right": "👉",
         "raised_hands": "🙌", "pray": "🙏", "point_up_2": "👆", "clap": "👏",
         "muscle": "💪",
-        // Hearts & symbols
         "heart": "❤️", "broken_heart": "💔", "two_hearts": "💕",
         "sparkling_heart": "💖", "heartpulse": "💗", "heartbeat": "💓",
         "revolving_hearts": "💞", "cupid": "💘", "blue_heart": "💙",
@@ -234,7 +270,6 @@ enum HTMLPostProcessor {
         "gift_heart": "💝", "star": "⭐", "star2": "🌟", "sparkles": "✨",
         "sunny": "☀️", "cloud": "☁️", "zap": "⚡", "fire": "🔥",
         "boom": "💥", "snowflake": "❄️", "droplet": "💧",
-        // Objects
         "rocket": "🚀", "tada": "🎉", "gift": "🎁", "bell": "🔔",
         "bookmark": "🔖", "bulb": "💡", "wrench": "🔧", "hammer": "🔨",
         "lock": "🔒", "unlock": "🔓", "key": "🔑", "mag": "🔍",
@@ -242,7 +277,6 @@ enum HTMLPostProcessor {
         "memo": "📝", "link": "🔗", "email": "📧", "phone": "📞",
         "computer": "💻", "bug": "🐛", "art": "🎨", "movie_camera": "🎥",
         "camera": "📷", "microphone": "🎤", "headphones": "🎧",
-        // Flags & misc
         "checkered_flag": "🏁", "triangular_flag_on_post": "🚩",
         "warning": "⚠️", "x": "❌", "o": "⭕",
         "white_check_mark": "✅", "heavy_check_mark": "✔️",
@@ -250,7 +284,6 @@ enum HTMLPostProcessor {
         "heavy_minus_sign": "➖", "heavy_exclamation_mark": "❗",
         "question": "❓", "exclamation": "❗", "100": "💯",
         "recycle": "♻️", "white_large_square": "⬜", "black_large_square": "⬛",
-        // Animals
         "dog": "🐶", "cat": "🐱", "mouse": "🐭", "hamster": "🐹",
         "rabbit": "🐰", "bear": "🐻", "panda_face": "🐼", "koala": "🐨",
         "tiger": "🐯", "lion": "🦁", "cow": "🐮", "pig": "🐷",
@@ -259,21 +292,19 @@ enum HTMLPostProcessor {
         "bee": "🐝", "butterfly": "🦋", "snail": "🐌", "snake": "🐍",
         "turtle": "🐢", "octopus": "🐙", "fish": "🐟", "whale": "🐳",
         "dolphin": "🐬", "crab": "🦀",
-        // Food
         "apple": "🍎", "green_apple": "🍏", "pizza": "🍕", "hamburger": "🍔",
         "fries": "🍟", "coffee": "☕", "beer": "🍺", "wine_glass": "🍷",
         "cake": "🎂", "cookie": "🍪", "ice_cream": "🍨", "taco": "🌮",
-        // Nature
         "seedling": "🌱", "evergreen_tree": "🌲", "deciduous_tree": "🌳",
         "palm_tree": "🌴", "cactus": "🌵", "tulip": "🌷", "cherry_blossom": "🌸",
         "rose": "🌹", "sunflower": "🌻", "hibiscus": "🌺", "maple_leaf": "🍁",
         "fallen_leaf": "🍂", "leaves": "🍃", "mushroom": "🍄",
         "earth_americas": "🌎", "earth_africa": "🌍", "earth_asia": "🌏",
         "globe_with_meridians": "🌐", "ocean": "🌊", "rainbow": "🌈",
-        // Arrows
         "arrow_up": "⬆️", "arrow_down": "⬇️", "arrow_left": "⬅️",
         "arrow_right": "➡️", "arrow_upper_right": "↗️",
         "arrow_lower_right": "↘️", "arrow_upper_left": "↖️",
         "arrow_lower_left": "↙️", "arrows_counterclockwise": "🔄",
+        "eyes": "👀", "thinking": "🤔", "metal": "🤘",
     ]
 }

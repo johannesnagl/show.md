@@ -22,11 +22,13 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         )
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc private func settingsChanged() {
         guard !markdownSource.isEmpty else { return }
-        let cls = currentTab == .rendered ? "tab-rendered" : "tab-source"
         loadCombined()
-        webView?.evaluateJavaScript("document.documentElement.className = '\(cls)'")
     }
 
     override func loadView() {
@@ -46,7 +48,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         copyButton.controlSize = .small
         copyButton.translatesAutoresizingMaskIntoConstraints = false
 
-let config = WKWebViewConfiguration()
+        let config = WKWebViewConfiguration()
         let wv = WKWebView(frame: .zero, configuration: config)
         wv.translatesAutoresizingMaskIntoConstraints = false
         webView = wv
@@ -93,7 +95,7 @@ let config = WKWebViewConfiguration()
     @objc private func tabChanged(_ sender: NSSegmentedControl) {
         currentTab = sender.selectedSegment == 0 ? .rendered : .source
         let cls = currentTab == .rendered ? "tab-rendered" : "tab-source"
-        webView?.evaluateJavaScript("document.documentElement.className = '\(cls)'")
+        webView?.evaluateJavaScript("document.documentElement.className = '\(cls)'", completionHandler: nil)
         copyButton.isHidden = currentTab != .rendered
     }
 
@@ -115,7 +117,8 @@ let config = WKWebViewConfiguration()
             markdownSource,
             theme: Settings.theme,
             fontSize: Settings.fontSize,
-            defaultTab: currentTab
+            defaultTab: currentTab,
+            mermaid: Settings.mermaidEnabled
         )
         webView.loadHTMLString(html, baseURL: fileDirectoryURL)
     }

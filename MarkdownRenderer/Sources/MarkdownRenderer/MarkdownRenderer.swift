@@ -27,7 +27,8 @@ public enum MarkdownRenderer {
         _ markdown: String,
         theme: Settings.Theme,
         fontSize: Settings.FontSize,
-        defaultTab: Settings.Tab
+        defaultTab: Settings.Tab,
+        mermaid: Bool = false
     ) -> String {
         let fm = FrontmatterParser.parse(markdown)
         let document = Document(parsing: fm.body)
@@ -35,17 +36,14 @@ public enum MarkdownRenderer {
         let contentBody = HTMLPostProcessor.process(visitor.visit(document))
         let renderedBody = HTMLTemplate.frontmatterHTML(fm.fields) + contentBody
         // Source view shows the full original markdown including frontmatter
-        let escaped = markdown
-            .replacingOccurrences(of: "&", with: "&amp;")
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-        let sourceBody = "<pre><code>\(escaped)</code></pre>"
+        let sourceBody = "<pre><code>\(HTMLEscape.escape(markdown))</code></pre>"
         return HTMLTemplate.wrapCombined(
             renderedBody: renderedBody,
             sourceBody: sourceBody,
             theme: theme,
             fontSize: fontSize,
-            defaultTab: defaultTab
+            defaultTab: defaultTab,
+            mermaid: mermaid
         )
     }
 
@@ -53,11 +51,7 @@ public enum MarkdownRenderer {
         _ markdown: String,
         fontSize: Settings.FontSize
     ) -> String {
-        let escaped = markdown
-            .replacingOccurrences(of: "&", with: "&amp;")
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-        let body = "<pre><code>\(escaped)</code></pre>"
+        let body = "<pre><code>\(HTMLEscape.escape(markdown))</code></pre>"
         return HTMLTemplate.wrapSource(body: body, fontSize: fontSize)
     }
 }

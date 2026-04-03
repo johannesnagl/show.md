@@ -1,5 +1,5 @@
 public enum HTMLTemplate {
-    public static func wrap(body: String, theme: Settings.Theme, fontSize: Settings.FontSize) -> String {
+    public static func wrap(body: String, theme: Settings.Theme, fontSize: Settings.FontSize, mermaid: Bool = false) -> String {
         """
         <!DOCTYPE html>
         <html data-theme="\(theme.rawValue)" style="font-size: \(fontSize.cssValue)">
@@ -11,7 +11,7 @@ public enum HTMLTemplate {
         </head>
         <body>
         \(body)
-        \(richFeatureScripts)
+        \(richFeatureScripts(mermaid: mermaid))
         </body>
         </html>
         """
@@ -22,7 +22,8 @@ public enum HTMLTemplate {
         sourceBody: String,
         theme: Settings.Theme,
         fontSize: Settings.FontSize,
-        defaultTab: Settings.Tab
+        defaultTab: Settings.Tab,
+        mermaid: Bool = false
     ) -> String {
         let initialClass = defaultTab == .rendered ? "tab-rendered" : "tab-source"
         return """
@@ -46,7 +47,7 @@ public enum HTMLTemplate {
         <body>
           <div class="view-rendered">\(renderedBody)</div>
           <div class="view-source">\(sourceBody)</div>
-        \(richFeatureScripts)
+        \(richFeatureScripts(mermaid: mermaid))
         </body>
         </html>
         """
@@ -71,7 +72,7 @@ public enum HTMLTemplate {
     static func frontmatterHTML(_ fields: [(key: String, value: String)]) -> String {
         guard !fields.isEmpty else { return "" }
         let rows = fields.map { field in
-            "<tr><th>\(field.key)</th><td>\(field.value)</td></tr>"
+            "<tr><th>\(HTMLEscape.escape(field.key))</th><td>\(HTMLEscape.escape(field.value))</td></tr>"
         }.joined(separator: "\n")
         let count = fields.count
         return """
@@ -101,12 +102,21 @@ public enum HTMLTemplate {
         """
     }
 
-    private static var richFeatureScripts: String {
-        """
+    private static func richFeatureScripts(mermaid mermaidEnabled: Bool) -> String {
+        let mermaidScript = mermaidEnabled ? "<script>\(ResourceLoader.mermaidJS)</script>" : ""
+        let mermaidInit = mermaidEnabled ? """
+              // Mermaid diagrams — detect theme
+              if (typeof mermaid !== 'undefined') {
+                var dt = document.documentElement.getAttribute('data-theme');
+                var isDark = dt === 'dark' || (dt === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                mermaid.initialize({ startOnLoad: true, securityLevel: 'strict', theme: isDark ? 'dark' : 'default' });
+              }
+        """ : ""
+        return """
         <script>\(ResourceLoader.highlightJS)</script>
         <script>\(ResourceLoader.katexJS)</script>
         <script>\(ResourceLoader.autoRenderJS)</script>
-        <script>\(ResourceLoader.mermaidJS)</script>
+        \(mermaidScript)
         <script>
         document.addEventListener('DOMContentLoaded', function() {
           // Syntax highlighting — only code blocks with a specified language
@@ -124,12 +134,7 @@ public enum HTMLTemplate {
               ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
             });
           }
-          // Mermaid diagrams — detect theme
-          if (typeof mermaid !== 'undefined') {
-            var dt = document.documentElement.getAttribute('data-theme');
-            var isDark = dt === 'dark' || (dt === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            mermaid.initialize({ startOnLoad: true, theme: isDark ? 'dark' : 'default' });
-          }
+        \(mermaidInit)
         });
         </script>
         """
@@ -185,6 +190,7 @@ public enum HTMLTemplate {
         h4, h5, h6 { font-size: 1em; }
         p { margin-bottom: 16px; }
         a { color: var(--link); pointer-events: none; text-decoration: none; }
+        a[href^="#"] { pointer-events: auto; cursor: pointer; }
         code {
           font-family: ui-monospace, SFMono-Regular, monospace;
           font-size: 0.875em;

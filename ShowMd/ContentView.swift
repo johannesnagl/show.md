@@ -5,24 +5,27 @@ private typealias MdSettings = Settings
 
 private let extensionBundleID = "io.github.showmd.app.extension"
 
-private func isExtensionEnabled() -> Bool {
-    let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
-    process.arguments = ["-m", "-p", "com.apple.quicklook.preview", "-i", extensionBundleID]
-    let pipe = Pipe()
-    process.standardOutput = pipe
-    process.standardError = Pipe()
-    try? process.run()
-    process.waitUntilExit()
-    let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-    // Extension is active if the bundle ID appears in pluginkit output at all
-    return output.contains(extensionBundleID)
+private func checkExtensionEnabled(completion: @escaping (Bool) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
+        process.arguments = ["-m", "-p", "com.apple.quicklook.preview", "-i", extensionBundleID]
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = Pipe()
+        try? process.run()
+        process.waitUntilExit()
+        let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+        let enabled = output.contains(extensionBundleID)
+        DispatchQueue.main.async { completion(enabled) }
+    }
 }
 
 struct ContentView: View {
     @State private var defaultTab: MdSettings.Tab = MdSettings.defaultTab
     @State private var theme: MdSettings.Theme = MdSettings.theme
     @State private var fontSize: MdSettings.FontSize = MdSettings.fontSize
+    @State private var mermaidEnabled: Bool = MdSettings.mermaidEnabled
     @State private var extensionEnabled: Bool = false
 
     var body: some View {
@@ -34,10 +37,11 @@ struct ContentView: View {
         .onChange(of: defaultTab) { _, newValue in MdSettings.defaultTab = newValue }
         .onChange(of: theme)      { _, newValue in MdSettings.theme = newValue }
         .onChange(of: fontSize)   { _, newValue in MdSettings.fontSize = newValue }
+        .onChange(of: mermaidEnabled) { _, newValue in MdSettings.mermaidEnabled = newValue }
         .preferredColorScheme(theme == .light ? .light : theme == .dark ? .dark : nil)
-        .onAppear { extensionEnabled = isExtensionEnabled() }
+        .onAppear { checkExtensionEnabled { extensionEnabled = $0 } }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            extensionEnabled = isExtensionEnabled()
+            checkExtensionEnabled { extensionEnabled = $0 }
         }
     }
 
@@ -94,6 +98,13 @@ struct ContentView: View {
                     Text("Source").tag(MdSettings.Tab.source)
                 }
                 .pickerStyle(.segmented)
+            }
+
+            Section("Rich Content") {
+                Toggle("Mermaid Diagrams", isOn: $mermaidEnabled)
+                Text("Render Mermaid diagram code blocks as visual charts. Increases preview load time.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             Section("Appearance") {
