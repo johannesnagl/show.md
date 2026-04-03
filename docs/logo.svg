@@ -13,5 +13,5 @@
   <circle cx="132" cy="156" r="40" fill="rgba(62,181,176,0.06)" stroke="white" stroke-width="4.5"/>
 
   <!-- Magnifier handle -->
-  <line x1="160" y1="184" x2="178" y2="198" stroke="white" stroke-width="9" stroke-linecap="round"/>
+  <line x1="160" y1="180" x2="174" y2="192" stroke="white" stroke-width="9" stroke-linecap="round"/>
 </svg>

@@ -16,16 +16,16 @@
 <meta property="og:description" content="Free, native macOS Quick Look extension. Renders Markdown beautifully — YAML frontmatter as a collapsible table, rendered and source toggle, dark mode. No account, no cloud.">
 <meta property="og:site_name" content="show.md">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://show.md/og-image.svg">
+<meta property="og:image" content="https://show.md/og-image.png">
 <meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:height" content="1200">
 <meta property="og:image:alt" content="show.md — renders your Markdown files beautifully in macOS Quick Look">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="show.md — The most readable way to preview any .md file on macOS">
 <meta name="twitter:description" content="Free, native macOS Quick Look extension. Renders Markdown beautifully — YAML frontmatter as a collapsible table, rendered and source toggle, dark mode.">
-<meta name="twitter:image" content="https://show.md/og-image.svg">
+<meta name="twitter:image" content="https://show.md/og-image.png">
 
 <!-- Favicons -->
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -116,7 +116,7 @@
     --ink2: #1C1C1C;
     --paper: #F5F5F3;
     --white: #FFFFFF;
-    --muted: #888880;
+    --muted: #9A9A94;
     --muted2: #BBBBB5;
     --accent: #3D7EF5;
     --teal: #1D9E75;
@@ -125,7 +125,7 @@
     /* theme tokens — dark default */
     --bg:          #0A0A0A;
     --fg:          #FFFFFF;
-    --fg-muted:    #888880;
+    --fg-muted:    #9A9A94;
     --fg-subtle:   rgba(255,255,255,0.2);
     --card-bg:     #111111;
     --card-border: rgba(255,255,255,0.07);
@@ -265,34 +265,6 @@
     padding: 100px 40px 40px;
   }
 
-  .hero-icon {
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0s forwards;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
-    font-size: 11px;
-    color: var(--muted);
-    border: 0.5px solid var(--badge-bdr);
-    padding: 6px 14px;
-    border-radius: 100px;
-    margin-bottom: 40px;
-    letter-spacing: 0.04em;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.1s forwards;
-  }
-
-  .hero-badge-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--teal);
-  }
-
   .hero-title {
     font-size: clamp(36px, 5vw, 56px);
     font-weight: 300;
@@ -352,16 +324,6 @@
   }
 
   .btn-secondary:hover { color: var(--fg); }
-
-  .hero-meta {
-    margin-top: 16px;
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
-    font-size: 11px;
-    color: var(--fg-subtle);
-    letter-spacing: 0.04em;
-    opacity: 0;
-    animation: fadeUp 0.7s 0.65s forwards;
-  }
 
   /* APP PREVIEW */
   .preview {
@@ -757,22 +719,6 @@
     line-height: 1.8;
     white-space: pre-wrap;
   }
-
-  .progress-dots {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-  }
-
-  .progress-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: background 0.3s;
-  }
-
-  .progress-dot.active { background: var(--teal); }
 
   /* INSTALL */
   .install {
@@ -1461,80 +1407,65 @@
 
   /* ── Light mode: preview overrides ── */
   html[data-theme="light"] .app-frame,
-  @media (prefers-color-scheme: light) { html:not([data-theme="dark"]) .app-frame {
-    background: #FAFAFA;
-    border-color: rgba(0,0,0,0.08);
-  }}
-
+  html:not([data-theme="dark"]) .app-frame { background: #FAFAFA; border-color: rgba(0,0,0,0.08); }
   html[data-theme="light"] .app-titlebar,
-  html[data-theme="light"] .app-inner-bar {
-    background: #EFEFED;
-    border-bottom-color: rgba(0,0,0,0.06);
-  }
-  html[data-theme="light"] .app-filename { color: rgba(0,0,0,0.35); }
-  html[data-theme="light"] .app-tab { color: rgba(0,0,0,0.4); }
-  html[data-theme="light"] .app-tab.active { background: rgba(61,126,245,0.12); color: #2D6FE8; }
-  html[data-theme="light"] .app-copy-btn {
-    color: rgba(0,0,0,0.35);
-    background: rgba(0,0,0,0.05);
-    border-color: rgba(0,0,0,0.1);
-  }
-  html[data-theme="light"] .md-meta-block { border-color: rgba(0,0,0,0.08); }
-  html[data-theme="light"] .md-meta-summary { background: #EFEFED; color: rgba(0,0,0,0.35); }
-  html[data-theme="light"] .md-meta-summary-arrow { color: rgba(0,0,0,0.25); }
-  html[data-theme="light"] .md-meta-table th, html[data-theme="light"] .md-meta-table td { border-top-color: rgba(0,0,0,0.05); }
-  html[data-theme="light"] .md-meta-table th { color: #2D6FE8; }
-  html[data-theme="light"] .md-meta-table td { color: #444; }
-  html[data-theme="light"] .md-h1 { color: #0A0A0A; }
-  html[data-theme="light"] .md-h2 { color: #333; }
-  html[data-theme="light"] .md-p { color: #555; }
-  html[data-theme="light"] .md-code { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #444; }
-  html[data-theme="light"] .md-tag { background: rgba(61,126,245,0.08); color: #2D6FE8; border-color: rgba(61,126,245,0.18); }
-  html[data-theme="light"] .md-raw-frontmatter { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #888; }
-  html[data-theme="light"] .app-body-plain { color: #777; }
-  html[data-theme="light"] .finder-window { background: #DCDCDA; }
-  html[data-theme="light"] .finder-titlebar { background: #C8C8C6; border-bottom-color: rgba(0,0,0,0.07); }
-  html[data-theme="light"] .finder-window-title { color: rgba(0,0,0,0.55); }
-  html[data-theme="light"] .finder-nav-arrows { color: rgba(0,0,0,0.25); }
-  html[data-theme="light"] .finder-sidebar { background: #D2D2D0; border-right-color: rgba(0,0,0,0.07); }
-  html[data-theme="light"] .finder-sidebar-label { color: rgba(0,0,0,0.3); }
-  html[data-theme="light"] .finder-sidebar-item { color: rgba(0,0,0,0.5); }
-  html[data-theme="light"] .finder-sidebar-item.active { background: rgba(61,126,245,0.18); color: rgba(0,0,0,0.75); }
-  html[data-theme="light"] .finder-file-row { color: rgba(0,0,0,0.5); border-bottom-color: rgba(0,0,0,0.04); }
-  html[data-theme="light"] .finder-file-row.selected { background: rgba(61,126,245,0.2); color: rgba(0,0,0,0.85); }
-
-  @media (prefers-color-scheme: light) {
-    html:not([data-theme="dark"]) .app-frame { background: #FAFAFA; border-color: rgba(0,0,0,0.08); }
-    html:not([data-theme="dark"]) .app-titlebar,
-    html:not([data-theme="dark"]) .app-inner-bar { background: #EFEFED; border-bottom-color: rgba(0,0,0,0.06); }
-    html:not([data-theme="dark"]) .app-filename { color: rgba(0,0,0,0.35); }
-    html:not([data-theme="dark"]) .app-tab { color: rgba(0,0,0,0.4); }
-    html:not([data-theme="dark"]) .app-tab.active { background: rgba(61,126,245,0.12); color: #2D6FE8; }
-    html:not([data-theme="dark"]) .app-copy-btn { color: rgba(0,0,0,0.35); background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
-    html:not([data-theme="dark"]) .md-meta-block { border-color: rgba(0,0,0,0.08); }
-    html:not([data-theme="dark"]) .md-meta-summary { background: #EFEFED; color: rgba(0,0,0,0.35); }
-    html:not([data-theme="dark"]) .md-meta-summary-arrow { color: rgba(0,0,0,0.25); }
-    html:not([data-theme="dark"]) .md-meta-table th, html:not([data-theme="dark"]) .md-meta-table td { border-top-color: rgba(0,0,0,0.05); }
-    html:not([data-theme="dark"]) .md-meta-table th { color: #2D6FE8; }
-    html:not([data-theme="dark"]) .md-meta-table td { color: #444; }
-    html:not([data-theme="dark"]) .md-h1 { color: #0A0A0A; }
-    html:not([data-theme="dark"]) .md-h2 { color: #333; }
-    html:not([data-theme="dark"]) .md-p { color: #555; }
-    html:not([data-theme="dark"]) .md-code { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #444; }
-    html:not([data-theme="dark"]) .md-tag { background: rgba(61,126,245,0.08); color: #2D6FE8; border-color: rgba(61,126,245,0.18); }
-    html:not([data-theme="dark"]) .md-raw-frontmatter { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #888; }
-    html:not([data-theme="dark"]) .app-body-plain { color: #777; }
-    html:not([data-theme="dark"]) .finder-window { background: #DCDCDA; }
-    html:not([data-theme="dark"]) .finder-titlebar { background: #C8C8C6; border-bottom-color: rgba(0,0,0,0.07); }
-    html:not([data-theme="dark"]) .finder-window-title { color: rgba(0,0,0,0.55); }
-    html:not([data-theme="dark"]) .finder-nav-arrows { color: rgba(0,0,0,0.25); }
-    html:not([data-theme="dark"]) .finder-sidebar { background: #D2D2D0; border-right-color: rgba(0,0,0,0.07); }
-    html:not([data-theme="dark"]) .finder-sidebar-label { color: rgba(0,0,0,0.3); }
-    html:not([data-theme="dark"]) .finder-sidebar-item { color: rgba(0,0,0,0.5); }
-    html:not([data-theme="dark"]) .finder-sidebar-item.active { background: rgba(61,126,245,0.18); color: rgba(0,0,0,0.75); }
-    html:not([data-theme="dark"]) .finder-file-row { color: rgba(0,0,0,0.5); border-bottom-color: rgba(0,0,0,0.04); }
-    html:not([data-theme="dark"]) .finder-file-row.selected { background: rgba(61,126,245,0.2); color: rgba(0,0,0,0.85); }
-  }
+  html[data-theme="light"] .app-inner-bar,
+  html:not([data-theme="dark"]) .app-titlebar,
+  html:not([data-theme="dark"]) .app-inner-bar { background: #EFEFED; border-bottom-color: rgba(0,0,0,0.06); }
+  html[data-theme="light"] .app-filename,
+  html:not([data-theme="dark"]) .app-filename { color: rgba(0,0,0,0.35); }
+  html[data-theme="light"] .app-tab,
+  html:not([data-theme="dark"]) .app-tab { color: rgba(0,0,0,0.4); }
+  html[data-theme="light"] .app-tab.active,
+  html:not([data-theme="dark"]) .app-tab.active { background: rgba(61,126,245,0.12); color: #2D6FE8; }
+  html[data-theme="light"] .app-copy-btn,
+  html:not([data-theme="dark"]) .app-copy-btn { color: rgba(0,0,0,0.35); background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
+  html[data-theme="light"] .md-meta-block,
+  html:not([data-theme="dark"]) .md-meta-block { border-color: rgba(0,0,0,0.08); }
+  html[data-theme="light"] .md-meta-summary,
+  html:not([data-theme="dark"]) .md-meta-summary { background: #EFEFED; color: rgba(0,0,0,0.35); }
+  html[data-theme="light"] .md-meta-summary-arrow,
+  html:not([data-theme="dark"]) .md-meta-summary-arrow { color: rgba(0,0,0,0.25); }
+  html[data-theme="light"] .md-meta-table th, html[data-theme="light"] .md-meta-table td,
+  html:not([data-theme="dark"]) .md-meta-table th, html:not([data-theme="dark"]) .md-meta-table td { border-top-color: rgba(0,0,0,0.05); }
+  html[data-theme="light"] .md-meta-table th,
+  html:not([data-theme="dark"]) .md-meta-table th { color: #2D6FE8; }
+  html[data-theme="light"] .md-meta-table td,
+  html:not([data-theme="dark"]) .md-meta-table td { color: #444; }
+  html[data-theme="light"] .md-h1,
+  html:not([data-theme="dark"]) .md-h1 { color: #0A0A0A; }
+  html[data-theme="light"] .md-h2,
+  html:not([data-theme="dark"]) .md-h2 { color: #333; }
+  html[data-theme="light"] .md-p,
+  html:not([data-theme="dark"]) .md-p { color: #555; }
+  html[data-theme="light"] .md-code,
+  html:not([data-theme="dark"]) .md-code { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #444; }
+  html[data-theme="light"] .md-tag,
+  html:not([data-theme="dark"]) .md-tag { background: rgba(61,126,245,0.08); color: #2D6FE8; border-color: rgba(61,126,245,0.18); }
+  html[data-theme="light"] .md-raw-frontmatter,
+  html:not([data-theme="dark"]) .md-raw-frontmatter { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #888; }
+  html[data-theme="light"] .app-body-plain,
+  html:not([data-theme="dark"]) .app-body-plain { color: #777; }
+  html[data-theme="light"] .finder-window,
+  html:not([data-theme="dark"]) .finder-window { background: #DCDCDA; }
+  html[data-theme="light"] .finder-titlebar,
+  html:not([data-theme="dark"]) .finder-titlebar { background: #C8C8C6; border-bottom-color: rgba(0,0,0,0.07); }
+  html[data-theme="light"] .finder-window-title,
+  html:not([data-theme="dark"]) .finder-window-title { color: rgba(0,0,0,0.55); }
+  html[data-theme="light"] .finder-nav-arrows,
+  html:not([data-theme="dark"]) .finder-nav-arrows { color: rgba(0,0,0,0.25); }
+  html[data-theme="light"] .finder-sidebar,
+  html:not([data-theme="dark"]) .finder-sidebar { background: #D2D2D0; border-right-color: rgba(0,0,0,0.07); }
+  html[data-theme="light"] .finder-sidebar-label,
+  html:not([data-theme="dark"]) .finder-sidebar-label { color: rgba(0,0,0,0.3); }
+  html[data-theme="light"] .finder-sidebar-item,
+  html:not([data-theme="dark"]) .finder-sidebar-item { color: rgba(0,0,0,0.5); }
+  html[data-theme="light"] .finder-sidebar-item.active,
+  html:not([data-theme="dark"]) .finder-sidebar-item.active { background: rgba(61,126,245,0.18); color: rgba(0,0,0,0.75); }
+  html[data-theme="light"] .finder-file-row,
+  html:not([data-theme="dark"]) .finder-file-row { color: rgba(0,0,0,0.5); border-bottom-color: rgba(0,0,0,0.04); }
+  html[data-theme="light"] .finder-file-row.selected,
+  html:not([data-theme="dark"]) .finder-file-row.selected { background: rgba(61,126,245,0.2); color: rgba(0,0,0,0.85); }
 
   @media (max-width: 640px) {
     nav { padding: 16px 20px; }
@@ -1572,7 +1503,7 @@
       <line x1="14" y1="22" x2="34" y2="22" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
       <line x1="14" y1="27" x2="37" y2="27" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
       <circle cx="41" cy="48" r="12" fill="rgba(62,181,176,0.07)" stroke="currentColor" stroke-width="1.5"/>
-      <line x1="50" y1="57" x2="56" y2="62" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="50" y1="55" x2="55" y2="59" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
     </svg>
     <span>show</span>md
   </a>
@@ -1616,7 +1547,7 @@
     </div>
 
     <div class="preview-scene">
-    <div class="finder-window">
+    <div class="finder-window" aria-hidden="true">
       <div class="finder-titlebar">
         <div class="dot dot-r"></div>
         <div class="dot dot-y"></div>
@@ -1656,7 +1587,7 @@
         <div class="dot dot-r"></div>
         <div class="dot dot-y"></div>
         <div class="dot dot-g"></div>
-        <span class="app-filename">AGENTS.md</span>
+        <span class="app-filename">CHANGELOG.md</span>
       </div>
 
       <!-- State 1: With Show.md -->
@@ -1865,6 +1796,11 @@ $ npm run build · npm test · npm run lint</div>
         <p class="feature-desc">Feels like it belongs. Respects system fonts, dark mode, and your keyboard.</p>
       </div>
       <div class="feature">
+        <div class="feature-icon">GFM</div>
+        <h3 class="feature-title">Full GitHub Flavored Markdown</h3>
+        <p class="feature-desc">Tables, task lists, strikethrough, autolinks, footnotes, and more. Powered by Apple's swift-markdown parser.</p>
+      </div>
+      <div class="feature">
         <div class="feature-icon">≡</div>
         <h3 class="feature-title">Frontmatter rendering</h3>
         <p class="feature-desc">YAML metadata rendered as a collapsible table. Collapsed by default, one click to expand. Unique to show.md.</p>
@@ -1931,7 +1867,7 @@ $ npm run build · npm test · npm run lint</div>
           <div class="install-method">Homebrew <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px;">coming soon</span></div>
           <div class="install-cmd"><em>brew install --cask</em> show-md</div>
         </div>
-        <button class="install-btn ghost" id="copy-brew" onclick="this.textContent='copied!';navigator.clipboard.writeText('brew install --cask show-md');setTimeout(()=>this.textContent='copy',2000)">copy</button>
+        <button class="install-btn ghost" id="copy-brew">copy</button>
       </div>
       <div class="install-row">
         <div class="install-row-left">
@@ -2020,11 +1956,13 @@ $ npm run build · npm test · npm run lint</div>
 <footer role="contentinfo">
   <a href="/" class="footer-logo">
     <svg width="18" height="18" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#222"/>
-      <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
-      <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
-      <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
-      <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
+      <path d="M 29,52 L 12,52 Q 9,52 9,49 L 9,8 Q 9,5 12,5 L 41,5 Q 44,5 44,8 L 44,36"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="14" y1="16" x2="40" y2="16" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      <line x1="14" y1="22" x2="34" y2="22" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+      <line x1="14" y1="27" x2="37" y2="27" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+      <circle cx="41" cy="48" r="12" fill="rgba(62,181,176,0.07)" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="50" y1="55" x2="55" y2="59" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
     </svg>
     <span>show</span>md
   </a>
@@ -2079,6 +2017,19 @@ $ npm run build · npm test · npm run lint</div>
       }
     });
   });
+})();
+
+// Brew copy button
+(function() {
+  var brewBtn = document.getElementById('copy-brew');
+  if (brewBtn) {
+    brewBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText('brew install --cask show-md').then(function() {
+        brewBtn.textContent = 'copied!';
+        setTimeout(function() { brewBtn.textContent = 'copy'; }, 2000);
+      });
+    });
+  }
 })();
 
 // Preview state switcher with auto-cycle (pauses on manual interaction)
@@ -2136,14 +2087,17 @@ $ npm run build · npm test · npm run lint</div>
     copyBtn.style.visibility = 'hidden';
   });
 
-  // Copy as HTML (demo feedback)
+  // Copy as HTML
   copyBtn.addEventListener('click', function() {
-    copyBtn.textContent = 'Copied!';
-    copyBtn.classList.add('copied');
-    setTimeout(function() {
-      copyBtn.textContent = 'Copy as HTML';
-      copyBtn.classList.remove('copied');
-    }, 1800);
+    var html = viewRendered ? viewRendered.innerHTML : '';
+    navigator.clipboard.writeText(html).then(function() {
+      copyBtn.textContent = 'Copied!';
+      copyBtn.classList.add('copied');
+      setTimeout(function() {
+        copyBtn.textContent = 'Copy as HTML';
+        copyBtn.classList.remove('copied');
+      }, 1800);
+    });
   });
 })();
 </script>
