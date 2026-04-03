@@ -8,7 +8,7 @@ Thanks for your interest in contributing! Please follow these guidelines.
 
 2. **PRs are only accepted with green CI.** All tests must pass in the GitHub Actions workflow before a PR will be reviewed or merged.
 
-3. **AI-generated PRs must check `tasks/lessons.md`.** If your PR was generated with the help of an AI coding assistant, you must review `tasks/lessons.md` for known pitfalls and ensure your changes don't violate any of the documented lessons.
+3. **AI-generated PRs must check `tasks/lessons.md` and `CLAUDE.md`.** If your PR was generated with the help of an AI coding assistant, you must review both `tasks/lessons.md` and the root `CLAUDE.md` for known pitfalls, project rules, and coding guidelines. Ensure your changes don't violate any of the documented lessons or instructions.
 
 4. **Run tests locally before pushing:**
    ```bash
