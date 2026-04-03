@@ -7,7 +7,7 @@ struct ShowMdApp: App {
             ContentView()
         }
         .windowResizability(.contentSize)
-        .defaultSize(width: 420, height: 420)
+        .defaultSize(width: 460, height: 480)
         .commands {
             CommandGroup(replacing: .newItem) {}
         }
