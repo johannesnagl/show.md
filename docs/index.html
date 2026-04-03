@@ -18,7 +18,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://show.md/og-image.png">
 <meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="show.md — renders your Markdown files beautifully in macOS Quick Look">
 
 <!-- Twitter Card -->
@@ -45,6 +45,10 @@
 
 <!-- Critical inline styles: prevent FOUC on theme -->
 <style>:root{--bg:#0A0A0A;--fg:#FFFFFF}html[data-theme="light"]{--bg:#F5F5F3;--fg:#0A0A0A}body{background:var(--bg);color:var(--fg)}</style>
+<!-- Theme detection: must run in <head> before first paint to prevent FOUC -->
+<script>
+(function(){var s=localStorage.getItem('theme');var t=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t)})();
+</script>
 
 <!-- Structured Data — SoftwareApplication -->
 <script type="application/ld+json">
@@ -134,6 +138,8 @@
     --tagline-dim: rgba(255,255,255,0.15);
     --badge-bdr:   rgba(255,255,255,0.12);
     --ghost-bdr:   rgba(255,255,255,0.12);
+    --btn-bg:      #FFFFFF;
+    --btn-fg:      #0A0A0A;
     --noise-op:    0.4;
   }
 
@@ -149,6 +155,8 @@
     --tagline-dim: rgba(0,0,0,0.12);
     --badge-bdr:   rgba(0,0,0,0.12);
     --ghost-bdr:   rgba(0,0,0,0.15);
+    --btn-bg:      #0A0A0A;
+    --btn-fg:      #FFFFFF;
     --muted:       #777770;
     --border:      rgba(0,0,0,0.08);
     --noise-op:    0.15;
@@ -167,6 +175,8 @@
       --tagline-dim: rgba(0,0,0,0.12);
       --badge-bdr:   rgba(0,0,0,0.12);
       --ghost-bdr:   rgba(0,0,0,0.15);
+      --btn-bg:      #0A0A0A;
+      --btn-fg:      #FFFFFF;
       --muted:       #777770;
       --border:      rgba(0,0,0,0.08);
       --noise-op:    0.15;
@@ -217,7 +227,6 @@
     gap: 10px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 15px;
-    color: var(--white);
     letter-spacing: -0.01em;
     text-decoration: none;
     color: var(--fg);
@@ -243,8 +252,8 @@
   .nav-cta {
     font-size: 13px;
     font-weight: 500;
-    background: var(--white);
-    color: var(--ink);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
     padding: 8px 18px;
     border-radius: 8px;
     text-decoration: none;
@@ -303,8 +312,8 @@
   .btn-primary {
     font-size: 14px;
     font-weight: 500;
-    background: var(--white);
-    color: var(--ink);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
     padding: 12px 24px;
     border-radius: 10px;
     text-decoration: none;
@@ -363,8 +372,8 @@
   .preview-btn:hover { color: var(--fg); }
 
   .preview-btn.active {
-    background: var(--white);
-    color: var(--ink);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
   }
 
   .preview-btn.active.showmd { background: var(--teal); color: var(--white); }
@@ -777,8 +786,8 @@
   .install-btn {
     font-size: 12px;
     font-weight: 500;
-    background: var(--white);
-    color: var(--ink);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
     padding: 8px 16px;
     border-radius: 7px;
     text-decoration: none;
@@ -1405,6 +1414,14 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   /* ── Light mode: preview overrides ── */
   html[data-theme="light"] .app-frame,
   html:not([data-theme="dark"]) .app-frame { background: #FAFAFA; border-color: rgba(0,0,0,0.08); }
@@ -1471,10 +1488,22 @@
     nav { padding: 16px 20px; }
     .nav-links { display: none; }
     .hero { padding: 60px 24px 16px; }
-    .preview { padding: 0 20px 40px; }
-    .app-body { padding: 20px; }
+    .hero-title { font-size: 28px; }
+    .hero-actions { flex-direction: column; gap: 12px; }
+    .preview { padding: 0 12px 40px; }
+    .preview-scene { height: 320px; border-radius: 10px; }
+    .finder-sidebar { display: none; }
+    .preview-scene .app-frame { left: 0; border-radius: 0; }
+    .finder-files { display: none; }
+    .finder-body { display: none; }
+    .finder-titlebar { border-radius: 10px 10px 0 0; }
+    .preview-switcher { flex-wrap: wrap; gap: 6px; }
+    .preview-btn { font-size: 12px; padding: 6px 10px; }
+    .app-body { padding: 16px; }
+    .app-body .md-h1 { font-size: 16px; }
     .install { padding: 60px 20px; }
-    .install-row { flex-direction: column; align-items: flex-start; }
+    .install-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .install-btn { width: 100%; text-align: center; }
     .features { padding: 60px 20px 80px; }
     .features-grid { grid-template-columns: 1fr; }
     .cta-section { padding: 80px 20px; }
@@ -1486,6 +1515,9 @@
     .author-section { padding: 60px 20px; }
     .author-card { flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px; }
     .step { gap: 20px; }
+    .fm-section { padding: 40px 16px; }
+    .fm-inner { gap: 32px; }
+    .fm-title { font-size: 24px; }
   }
 </style>
 </head>
@@ -1539,7 +1571,7 @@
   </section>
 
   <!-- APP PREVIEW -->
-  <section class="preview">
+  <section class="preview" aria-label="App preview">
     <div class="preview-switcher">
       <button class="preview-btn active showmd" data-state="0">✨ With Show.md</button>
       <button class="preview-btn other" data-state="1">😬 With other apps</button>
@@ -1569,7 +1601,7 @@
           <div class="finder-sidebar-separator"></div>
           <div class="finder-sidebar-label">Locations</div>
           <div class="finder-sidebar-item"><span class="si">☁️</span> iCloud Drive</div>
-          <div class="finder-sidebar-item"><span class="si">💜</span> <a href="https://pr.tn/ref/MZB6Q7BF" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Proton Drive</a></div>
+          <div class="finder-sidebar-item"><span class="si">💜</span> <a href="https://pr.tn/ref/MZB6Q7BF" target="_blank" rel="noopener" tabindex="-1" style="color:inherit;text-decoration:none;">Proton Drive</a></div>
         </div>
         <div class="finder-files">
           <div class="finder-file-row"><span class="finder-file-icon">📝</span> AGENTS.md</div>
@@ -1700,22 +1732,22 @@ $ npm run build · npm test · npm run lint</div>
       <h2 id="steps-heading">Three steps, then forget about it <a href="#steps-heading" class="heading-anchor" aria-label="Link to this section">#</a></h2>
       <div class="section-rule"></div>
     </div>
-    <ol class="steps-list reveal" role="list">
-      <li class="step" role="listitem">
+    <ol class="steps-list reveal">
+      <li class="step">
         <div class="step-num" aria-hidden="true">01</div>
         <div class="step-body">
           <h3>Download &amp; open show.md</h3>
           <p>The Quick Look extension registers automatically. No configuration, no Terminal commands.</p>
         </div>
       </li>
-      <li class="step" role="listitem">
+      <li class="step">
         <div class="step-num" aria-hidden="true">02</div>
         <div class="step-body">
           <h3>Enable in System Settings</h3>
           <p>System Settings → Privacy &amp; Security → Extensions → Quick Look. One toggle.</p>
         </div>
       </li>
-      <li class="step" role="listitem">
+      <li class="step">
         <div class="step-num" aria-hidden="true">03</div>
         <div class="step-body">
           <h3>Spacebar any .md file in Finder</h3>
@@ -1726,7 +1758,7 @@ $ npm run build · npm test · npm run lint</div>
   </section>
 
   <!-- TAGLINE -->
-  <section class="tagline-section">
+  <section class="tagline-section" aria-label="Tagline">
     <p class="tagline-big">
       AI writes in markdown.<br>
       <strong>The least you can do is render it.</strong>
@@ -1734,11 +1766,11 @@ $ npm run build · npm test · npm run lint</div>
   </section>
 
   <!-- FRONTMATTER SPOTLIGHT -->
-  <section class="fm-section">
+  <section class="fm-section" aria-labelledby="fm-heading">
     <div class="fm-inner">
       <div class="fm-text">
         <p class="fm-eyebrow">unique to show.md</p>
-        <h2 class="fm-title">YAML frontmatter,<br><em>finally rendered.</em></h2>
+        <h2 class="fm-title" id="fm-heading">YAML frontmatter,<br><em>finally rendered.</em></h2>
         <p class="fm-desc">Most markdown viewers ignore the <code>---</code> block at the top of your files. show.md parses it and surfaces it as a collapsible metadata table — collapsed by default so it never gets in the way, always one click away when you need it.</p>
         <p class="fm-desc">Works with plain values, quoted strings, arrays, and multi-line folded blocks. Everything authors actually write.</p>
       </div>
@@ -1782,8 +1814,8 @@ $ npm run build · npm test · npm run lint</div>
   </section>
 
   <!-- FEATURES -->
-  <section class="features" id="features">
-    <p class="section-label">what it does</p>
+  <section class="features" id="features" aria-labelledby="features-heading">
+    <h2 class="section-label" id="features-heading">what it does</h2>
     <div class="features-grid">
       <div class="feature">
         <div class="feature-icon">⚡</div>
@@ -1859,8 +1891,8 @@ $ npm run build · npm test · npm run lint</div>
   </section>
 
   <!-- INSTALL -->
-  <section class="install" id="install">
-    <p class="install-label">get it</p>
+  <section class="install" id="install" aria-labelledby="install-heading">
+    <h2 class="install-label" id="install-heading">get it</h2>
     <div class="install-options">
       <div class="install-row">
         <div class="install-row-left">
@@ -1894,35 +1926,35 @@ $ npm run build · npm test · npm run lint</div>
     </div>
     <dl class="faq-list reveal">
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false">How do I enable show.md in Finder? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer">Download show.md, open it once, then go to System Settings → Privacy &amp; Security → Extensions → Quick Look. Enable show.md there. After that, pressing Space on any .md file in Finder will use show.md automatically.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a1">How do I enable show.md in Finder? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a1">Download show.md, open it once, then go to System Settings → Privacy &amp; Security → Extensions → Quick Look. Enable show.md there. After that, pressing Space on any .md file in Finder will use show.md automatically.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false">What happens to YAML frontmatter? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer">show.md parses the <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">---</code> block and renders it as a collapsible metadata table — collapsed by default so it never gets in the way. Supports plain values, quoted strings, arrays, and multi-line folded blocks.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a2">What happens to YAML frontmatter? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a2">show.md parses the <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">---</code> block and renders it as a collapsible metadata table — collapsed by default so it never gets in the way. Supports plain values, quoted strings, arrays, and multi-line folded blocks.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false">Can I see the raw Markdown source? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer">Yes. show.md has a Rendered / Source toggle at the top of every preview. Click Source to see the original Markdown, Rendered to go back. You can also copy the file as HTML from the Rendered view.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a3">Can I see the raw Markdown source? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a3">Yes. show.md has a Rendered / Source toggle at the top of every preview. Click Source to see the original Markdown, Rendered to go back. You can also copy the file as HTML from the Rendered view.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false">Does show.md support dark mode? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer">Yes — show.md follows your macOS appearance setting automatically. You can also override it in show.md's settings: choose Light, Dark, or Auto.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a4">Does show.md support dark mode? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a4">Yes — show.md follows your macOS appearance setting automatically. You can also override it in show.md's settings: choose Light, Dark, or Auto.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false">Is show.md an editor? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer">No. show.md is a viewer only — a Quick Look extension. It opens files read-only. Its job is to render your markdown and get out of the way.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a5">Is show.md an editor? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a5">No. show.md is a viewer only — a Quick Look extension. It opens files read-only. Its job is to render your markdown and get out of the way.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false">Is show.md free? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer">Yes — completely free and open source under the MIT license. Source on GitHub. If it saves you a trip to VS Code, you can optionally buy the developer a pasta.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a6">Is show.md free? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a6">Yes — completely free and open source under the MIT license. Source on GitHub. If it saves you a trip to VS Code, you can optionally buy the developer a pasta.</dd>
       </div>
     </dl>
   </section>
 
   <!-- AUTHOR -->
   <section class="author-section" id="author" aria-labelledby="author-heading">
-    <p class="author-eyebrow reveal">made in vienna, europe</p>
+    <p class="author-eyebrow reveal" id="author-heading">made in vienna, europe</p>
     <div class="author-card reveal">
       <img src="/author.jpg" alt="Johannes Nagl" class="author-photo" width="72" height="72" loading="lazy">
       <div class="author-info">
@@ -1975,17 +2007,12 @@ $ npm run build · npm test · npm run lint</div>
 </footer>
 
 <script>
-// Apply theme from localStorage or system preference before paint
-(function() {
-  var stored = localStorage.getItem('theme');
-  var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  document.documentElement.setAttribute('data-theme', theme);
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-    if (!localStorage.getItem('theme')) {
-      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    }
-  });
-})();
+// Listen for system theme changes (initial detection already ran in <head>)
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+  if (!localStorage.getItem('theme')) {
+    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+  }
+});
 
 // Scroll reveal
 (function() {
@@ -2027,6 +2054,9 @@ $ npm run build · npm test · npm run lint</div>
       navigator.clipboard.writeText('brew install --cask show-md').then(function() {
         brewBtn.textContent = 'copied!';
         setTimeout(function() { brewBtn.textContent = 'copy'; }, 2000);
+      }).catch(function() {
+        brewBtn.textContent = 'failed';
+        setTimeout(function() { brewBtn.textContent = 'copy'; }, 2000);
       });
     });
   }
@@ -2062,7 +2092,11 @@ $ npm run build · npm test · npm run lint</div>
   });
 
   showState(0);
-  startCycle();
+  // Stop auto-cycle after one full rotation (WCAG 2.2.2) or if user prefers reduced motion
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    startCycle();
+    setTimeout(function() { clearInterval(timer); }, 3500 * 3);
+  }
 
   // Rendered / Source tab toggle
   const tabRendered = document.getElementById('tab-rendered');
@@ -2097,6 +2131,9 @@ $ npm run build · npm test · npm run lint</div>
         copyBtn.textContent = 'Copy as HTML';
         copyBtn.classList.remove('copied');
       }, 1800);
+    }).catch(function() {
+      copyBtn.textContent = 'Copy failed';
+      setTimeout(function() { copyBtn.textContent = 'Copy as HTML'; }, 1800);
     });
   });
 })();

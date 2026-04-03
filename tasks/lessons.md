@@ -193,6 +193,54 @@ cd MarkdownRenderer && swift test
 
 ---
 
+## Website — Accessibility, Performance, SEO & Mobile Standards
+
+**Every website change MUST follow these rules.** This is a checklist, not a suggestion.
+
+### Accessibility (WCAG AA)
+
+1. **Every `<section>` needs an accessible name** — use `aria-labelledby` pointing to a heading with an `id`, or `aria-label` for decorative sections.
+2. **Use semantic HTML** — `<h2>` not `<p>` for section headings; `<nav>`, `<main>`, `<footer>` for landmarks. Decorative elements get `aria-hidden="true"`.
+3. **Color contrast: WCAG AA minimum (4.5:1 for text, 3:1 for large text)** — test dark AND light mode. Use theme-aware CSS variables (`--btn-bg`/`--btn-fg`) for buttons, never hardcoded `var(--white)` on potentially white backgrounds.
+4. **`prefers-reduced-motion`** — all animations and transitions must have a `reduce` override. Auto-cycling content must stop after one rotation (WCAG 2.2.2).
+5. **Keyboard navigation** — all interactive elements must be reachable via Tab. Hidden decorative links need `tabindex="-1"`. FAQ accordion buttons need `aria-expanded` + `aria-controls`.
+6. **Focus styles** — use `:focus-visible` with a visible outline (`2px solid var(--accent)`).
+
+### Performance
+
+1. **No FOUC** — theme detection script runs in `<head>` as a blocking inline `<script>`, not at end of body.
+2. **Font loading** — use `font-display: swap` (via Google Fonts `&display=swap`), preconnect to font origins.
+3. **No render-blocking CSS** — critical styles are inlined; everything else is in a single `<style>` block (no external CSS files).
+4. **Images** — use `width`/`height` or `aspect-ratio` to prevent layout shifts. Favicon set: SVG + 32px PNG + 180px apple-touch-icon + webmanifest.
+
+### SEO & Social
+
+1. **OG image must be PNG** (not SVG) — social platforms don't render SVG. Dimensions in meta tags must match the actual file.
+2. **Structured data** — `SoftwareApplication` + `FAQPage` schemas in `<script type="application/ld+json">`.
+3. **Canonical URL**, title, description, Twitter card, and OG tags are all required.
+4. **All external links** get `rel="noopener" target="_blank"`.
+
+### Mobile (max-width: 640px)
+
+1. **Preview scene must fit** — reduce height, hide sidebar, adapt app frame to full width.
+2. **Buttons** — full width on mobile (`width: 100%`), stack vertically.
+3. **Typography** — clamp hero title (`font-size: 28px` on mobile), reduce section padding.
+4. **Navigation** — hide nav links, keep logo + CTA.
+5. **Install section** — stack rows vertically.
+6. **Test on actual phones** — the 640px breakpoint is the minimum; verify nothing overflows horizontally.
+
+### Past incidents
+
+- Buttons used `background: var(--white)` which is always `#FFFFFF` — invisible on light backgrounds. Fixed with `--btn-bg`/`--btn-fg` tokens.
+- Theme script at bottom of body caused FOUC — all variables flashed dark values on light-mode systems.
+- Missing `favicon-32.png` and `apple-touch-icon.png` caused 404s on every page load.
+- OG image was SVG — showed broken/missing image on Twitter, Facebook, LinkedIn.
+- Preview scene had fixed 480px height — overflowed and clipped on mobile screens.
+- Inline `onclick` on brew button — moved to `addEventListener` for CSP compatibility.
+- Auto-cycling preview ran indefinitely — violated WCAG 2.2.2 requirement.
+
+---
+
 ## Release Checklist (when ready)
 
 1. Set DEVELOPMENT_TEAM in Xcode for both targets
