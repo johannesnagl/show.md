@@ -8,4 +8,4 @@ DerivedData/
 *.dSYM
 MarkdownRenderer/Package.resolved
 MarkdownRenderer/.swiftpm/
-show.md.xcodeproj/
+showmd.xcodeproj/

@@ -36,7 +36,7 @@ private typealias MdSettings = Settings
 
 ### App Groups suite name
 
-Suite name used throughout: `group.io.github.show-md`
+Suite name used throughout: `group.one.yetanother.showmd`
 Must be identical in:
 - `Settings.swift` (`UserDefaults(suiteName:)`)
 - `ShowMd/ShowMd.entitlements`

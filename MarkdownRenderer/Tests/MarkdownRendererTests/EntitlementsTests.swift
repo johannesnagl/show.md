@@ -52,14 +52,14 @@ import Foundation
     @Test func extensionHasAppGroups() throws {
         let entitlements = try loadEntitlements(at: "ShowMdExtension/ShowMdExtension.entitlements")
         let groups = entitlements["com.apple.security.application-groups"] as? [String] ?? []
-        #expect(groups.contains("group.io.github.show-md"),
+        #expect(groups.contains("group.one.yetanother.showmd"),
                 "Extension must have App Groups entitlement for settings sharing")
     }
 
     @Test func hostAppHasAppGroups() throws {
         let entitlements = try loadEntitlements(at: "ShowMd/ShowMd.entitlements")
         let groups = entitlements["com.apple.security.application-groups"] as? [String] ?? []
-        #expect(groups.contains("group.io.github.show-md"),
+        #expect(groups.contains("group.one.yetanother.showmd"),
                 "Host app must have App Groups entitlement for settings sharing")
     }
 }

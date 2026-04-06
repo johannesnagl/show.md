@@ -1,7 +1,7 @@
 import Foundation
 
 public struct Settings {
-    public static var userDefaults: UserDefaults = UserDefaults(suiteName: "group.io.github.show-md")
+    public static var userDefaults: UserDefaults = UserDefaults(suiteName: "group.one.yetanother.showmd")
         ?? UserDefaults.standard
 
     public enum Tab: String, CaseIterable {

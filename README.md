@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://mojo.tech/showmd">Website</a> &middot;
+  <a href="https://showmd.yetanother.one">Website</a> &middot;
   <a href="#install">Install</a> &middot;
   <a href="#features">Features</a> &middot;
   <a href="#build-from-source">Build from Source</a>
@@ -21,7 +21,7 @@
 ## Install
 
 ```bash
-brew install --cask show-md
+brew install --cask showmd
 ```
 
 Then open **showmd** once, go to **System Settings → Privacy & Security → Extensions → Quick Look**, and enable it. After that, pressing <kbd>Space</kbd> on any Markdown file in Finder will use showmd automatically.
@@ -60,7 +60,7 @@ Then open **showmd** once, go to **System Settings → Privacy & Security → Ex
 
 ```bash
 # Clone the repo
-git clone https://github.com/johannesnagl/show.md.git
+git clone https://github.com/johannesnagl/showmd.git
 cd show.md
 
 # Generate the Xcode project
@@ -105,7 +105,7 @@ show.md/
 └── project.yml              # XcodeGen project definition
 ```
 
-Settings are shared between the host app and the Quick Look extension via **App Groups** (`group.io.github.show-md`).
+Settings are shared between the host app and the Quick Look extension via **App Groups** (`group.io.github.showmd`).
 
 ## Dependencies
 
@@ -122,6 +122,6 @@ MIT
 
 ## Author
 
-**Johannes Nagl** — [showmd](https://mojo.tech/showmd)
+**Johannes Nagl** — [showmd](https://showmd.yetanother.one)
 
 Concept, growth, and everything except coding — coded with **Claude**.

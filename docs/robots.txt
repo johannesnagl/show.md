@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mojo.tech/showmd/sitemap.xml
+Sitemap: https://showmd.yetanother.one/sitemap.xml

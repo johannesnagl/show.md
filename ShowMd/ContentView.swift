@@ -232,12 +232,12 @@ struct ContentView: View {
 
     private var footerView: some View {
         HStack(spacing: 6) {
-            Link(destination: URL(string: "https://github.com/johannesnagl/show.md")!) {
+            Link(destination: URL(string: "https://github.com/johannesnagl/showmd")!) {
                 Label("GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
             }
             Text("  ·  ")
                 .foregroundStyle(.quaternary)
-            Link(destination: URL(string: "https://mojo.tech/showmd")!) {
+            Link(destination: URL(string: "https://showmd.yetanother.one")!) {
                 Label("Website", systemImage: "globe")
             }
             Text("  ·  ")

@@ -7,7 +7,7 @@ showmd is a free, native macOS Quick Look extension that renders Markdown beauti
 ## Install
 
 ```
-brew install --cask show-md
+brew install --cask showmd
 ```
 
 Then enable in System Settings → Privacy & Security → Extensions → Quick Look.
@@ -42,8 +42,8 @@ Dependencies: apple/swift-markdown for parsing, highlight.js for syntax highligh
 
 ## Links
 
-- Website: https://mojo.tech/showmd
-- GitHub: https://github.com/johannesnagl/show.md
+- Website: https://showmd.yetanother.one
+- GitHub: https://github.com/johannesnagl/showmd
 - Author: Johannes Nagl
 
 ## License
