@@ -984,6 +984,20 @@
 
   .footer-links a:hover { color: var(--muted); }
 
+  .footer-claim {
+    font-size: 11px;
+    color: var(--fg-subtle);
+    margin: 0;
+    opacity: 0.7;
+  }
+  .footer-claim a {
+    color: var(--fg-subtle);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+  }
+  .footer-claim a:hover { color: var(--muted); }
+
   /* FRONTMATTER SPOTLIGHT */
   .fm-section {
     position: relative;
@@ -2010,6 +2024,7 @@ $ npm run build · npm test · npm run lint</div>
     <li><a href="https://github.com/johannesnagl/showmd" rel="noopener" target="_blank">github</a></li>
     <li><a href="https://www.linkedin.com/in/johannesnagl/" rel="noopener" target="_blank">linkedin</a></li>
   </ul>
+  <p class="footer-claim">This is yet another one: <a href="https://yetanother.one" rel="noopener" target="_blank">See all of my side projects at once</a></p>
 </footer>
 
 <script>
