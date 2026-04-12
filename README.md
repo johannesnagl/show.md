@@ -105,7 +105,7 @@ show.md/
 └── project.yml              # XcodeGen project definition
 ```
 
-Settings are shared between the host app and the Quick Look extension via **App Groups** (`group.io.github.showmd`).
+Settings are shared between the host app and the Quick Look extension via **App Groups** (`group.one.yetanother.showmd`).
 
 ## Dependencies
 

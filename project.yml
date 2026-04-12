@@ -1,6 +1,6 @@
 name: showmd
 options:
-  bundleIdPrefix: io.github.showmd
+  bundleIdPrefix: one.yetanother.showmd
   deploymentTarget:
     macOS: "26.0"
   createIntermediateGroups: true
@@ -18,7 +18,7 @@ targets:
       - ShowMd
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: io.github.showmd.app
+        PRODUCT_BUNDLE_IDENTIFIER: one.yetanother.showmd.app
         PRODUCT_NAME: showmd
         MACOSX_DEPLOYMENT_TARGET: "26.0"
         ENABLE_HARDENED_RUNTIME: YES
@@ -42,7 +42,7 @@ targets:
       - ShowMdExtension
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: io.github.showmd.app.extension
+        PRODUCT_BUNDLE_IDENTIFIER: one.yetanother.showmd.app.extension
         MACOSX_DEPLOYMENT_TARGET: "26.0"
         SWIFT_VERSION: "5.9"
         INFOPLIST_FILE: ShowMdExtension/Info.plist

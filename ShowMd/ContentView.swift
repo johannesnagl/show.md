@@ -3,7 +3,7 @@ import struct MarkdownRenderer.Settings
 
 private typealias MdSettings = Settings
 
-private let extensionBundleID = "io.github.showmd.app.extension"
+private let extensionBundleID = "one.yetanother.showmd.app.extension"
 
 private func checkExtensionEnabled(completion: @escaping (Bool) -> Void) {
     DispatchQueue.global(qos: .userInitiated).async {

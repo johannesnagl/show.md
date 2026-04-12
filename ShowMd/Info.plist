@@ -29,7 +29,7 @@
         <!-- MDX: Markdown + JSX (Next.js, Docusaurus, Storybook) -->
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>io.github.showmd.mdx</string>
+            <string>one.yetanother.showmd.mdx</string>
             <key>UTTypeDescription</key>
             <string>MDX Document</string>
             <key>UTTypeConformsTo</key>
@@ -47,7 +47,7 @@
         <!-- MDC: Markdown Components (Nuxt Content / Cursor rules) -->
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>io.github.showmd.mdc</string>
+            <string>one.yetanother.showmd.mdc</string>
             <key>UTTypeDescription</key>
             <string>MDC Document</string>
             <key>UTTypeConformsTo</key>
@@ -65,7 +65,7 @@
         <!-- R Markdown -->
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>io.github.showmd.rmd</string>
+            <string>one.yetanother.showmd.rmd</string>
             <key>UTTypeDescription</key>
             <string>R Markdown Document</string>
             <key>UTTypeConformsTo</key>
@@ -84,7 +84,7 @@
         <!-- Quarto Markdown -->
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>io.github.showmd.qmd</string>
+            <string>one.yetanother.showmd.qmd</string>
             <key>UTTypeDescription</key>
             <string>Quarto Markdown Document</string>
             <key>UTTypeConformsTo</key>
@@ -102,7 +102,7 @@
         <!-- Alternate markdown extensions -->
         <dict>
             <key>UTTypeIdentifier</key>
-            <string>io.github.showmd.mdown</string>
+            <string>one.yetanother.showmd.mdown</string>
             <key>UTTypeDescription</key>
             <string>Markdown Document</string>
             <key>UTTypeConformsTo</key>

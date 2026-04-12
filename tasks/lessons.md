@@ -158,7 +158,7 @@ To support non-standard markdown extensions (`.mdx`, `.mdc`, `.rmd`, `.qmd`, `.m
 
 1. Declare `UTImportedTypeDeclarations` in the **host app's** `ShowMd/Info.plist` — this registers the custom UTTypes with the system.
 2. Add the custom UTType identifiers to `QLSupportedContentTypes` in `ShowMdExtension/Info.plist` — this tells the Quick Look extension to handle them.
-3. Use a consistent naming convention: `io.github.showmd.<ext>` for the UTType identifiers.
+3. Use a consistent naming convention: `one.yetanother.showmd.<ext>` for the UTType identifiers.
 4. Each UTType must conform to `public.plain-text` and specify `public.filename-extension` in `UTTypeTagSpecification`.
 
 ---
