@@ -2,7 +2,7 @@
   <img src="docs/icon.svg" width="128" height="128" alt="showmd icon">
 </p>
 
-<h1 align="center">showmd</h1>
+<h1 align="center">showmd <img src="https://img.shields.io/github/downloads/johannesnagl/showmd/total" alt="total downloads"></h1>
 
 <p align="center">
   <strong>The most readable way to preview any <code>.md</code> file on macOS.</strong><br>
