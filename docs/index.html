@@ -1924,7 +1924,7 @@ $ npm run build · npm test · npm run lint</div>
       <div class="install-row">
         <div class="install-row-left">
           <div class="install-method">Homebrew</div>
-          <div class="install-cmd"><em>brew tap</em> johannesnagl/tap <em>&amp;&amp; brew install --cask</em> showmd</div>
+          <div class="install-cmd"><em>brew install --cask</em> johannesnagl/tap/showmd</div>
         </div>
         <button class="install-btn ghost" id="copy-brew">copy</button>
       </div>
@@ -2090,7 +2090,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
   var brewBtn = document.getElementById('copy-brew');
   if (brewBtn) {
     brewBtn.addEventListener('click', function() {
-      navigator.clipboard.writeText('brew tap johannesnagl/tap && brew install --cask showmd').then(function() {
+      navigator.clipboard.writeText('brew install --cask johannesnagl/tap/showmd').then(function() {
         brewBtn.textContent = 'copied!';
         setTimeout(function() { brewBtn.textContent = 'copy'; }, 2000);
       }).catch(function() {

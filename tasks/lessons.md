@@ -324,5 +324,5 @@ The script handles: xcodegen → tests → build → Developer ID signing → no
 ### Homebrew tap
 
 - Repo: `johannesnagl/homebrew-tap` — supports multiple casks in `Casks/` directory
-- Install: `brew tap johannesnagl/tap && brew install --cask showmd`
+- Install: `brew install --cask johannesnagl/tap/showmd` (shorthand auto-taps)
 - Update SHA-256 from zip checksum after each release
