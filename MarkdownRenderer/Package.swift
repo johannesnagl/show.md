@@ -8,8 +8,8 @@ let package = Package(
         .library(name: "MarkdownRenderer", targets: ["MarkdownRenderer"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-markdown.git", from: "0.3.0"),
-        .package(url: "https://github.com/apple/swift-testing.git", from: "0.7.0"),
+        .package(url: "https://github.com/apple/swift-markdown.git", from: "0.8.0"),
+        .package(url: "https://github.com/apple/swift-testing.git", from: "0.99.0"),
     ],
     targets: [
         .target(
